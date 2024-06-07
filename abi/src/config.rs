@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use tonic::async_trait;
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Config {
@@ -25,6 +26,13 @@ impl Default for RpcConfig {
             },
         }
     }
+}
+
+#[async_trait]
+pub trait FromConfig: Sized {
+    type Error;
+
+    async fn from_config(config: &Config) -> Result<Self, Self::Error>;
 }
 
 //注册中心配置

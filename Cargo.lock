@@ -155,6 +155,7 @@ dependencies = [
  "poem",
  "poem-openapi",
  "thiserror",
+ "utils",
 ]
 
 [[package]]

@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 abi = { path = "../abi" }
+utils = { path = "../utils" }
 
 poem = { version = "3.0" }
 poem-openapi = { version = "5.0", features = ["swagger-ui"] }
