@@ -1,3 +1,4 @@
+pub mod config;
 pub mod pb;
 
 pub use thiserror;
