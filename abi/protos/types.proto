@@ -61,7 +61,7 @@ message UserUnregister {
     int32 id = 1;
 }
 
-message GetUserInfoParams {
+message GetUserInfoParam {
     int32 id = 1;
 }
 
@@ -71,7 +71,7 @@ service DbService {
   rpc Register(UserRegister) returns (UserBase);
   rpc Unregister(UserUnregister) returns (UserBase);
   rpc Login(UserLogin) returns (UserBase);
-  rpc GetUserInfo(GetUserInfoParams) returns (UserBase);
+  rpc GetUserInfo(GetUserInfoParam) returns (UserBase);
   rpc Update(UserUpdate) returns (UserBase);
 
 }

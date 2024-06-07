@@ -1,4 +1,4 @@
-use abi::thiserror::Error;
+use abi::thiserror::{self, Error};
 use std::io::Error as IoError;
 use utils::Error as UtilsError;
 

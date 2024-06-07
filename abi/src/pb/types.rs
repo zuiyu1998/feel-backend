@@ -93,7 +93,7 @@ pub struct UserUnregister {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetUserInfoParams {
+pub struct GetUserInfoParam {
     #[prost(int32, tag = "1")]
     pub id: i32,
 }
@@ -257,7 +257,7 @@ pub mod db_service_client {
         }
         pub async fn get_user_info(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetUserInfoParams>,
+            request: impl tonic::IntoRequest<super::GetUserInfoParam>,
         ) -> std::result::Result<tonic::Response<super::UserBase>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -312,7 +312,7 @@ pub mod db_service_server {
         ) -> std::result::Result<tonic::Response<super::UserBase>, tonic::Status>;
         async fn get_user_info(
             &self,
-            request: tonic::Request<super::GetUserInfoParams>,
+            request: tonic::Request<super::GetUserInfoParam>,
         ) -> std::result::Result<tonic::Response<super::UserBase>, tonic::Status>;
         async fn update(
             &self,
@@ -514,12 +514,12 @@ pub mod db_service_server {
                 "/types.DbService/GetUserInfo" => {
                     #[allow(non_camel_case_types)]
                     struct GetUserInfoSvc<T: DbService>(pub Arc<T>);
-                    impl<T: DbService> tonic::server::UnaryService<super::GetUserInfoParams> for GetUserInfoSvc<T> {
+                    impl<T: DbService> tonic::server::UnaryService<super::GetUserInfoParam> for GetUserInfoSvc<T> {
                         type Response = super::UserBase;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetUserInfoParams>,
+                            request: tonic::Request<super::GetUserInfoParam>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {

@@ -7,3 +7,9 @@ edition = "2021"
 
 [dependencies]
 abi = { path = "../abi" }
+
+sea-orm = { version = "0.12", features = [
+    "runtime-tokio-rustls",
+    "sqlx-postgres",
+    "chrono",
+] }
