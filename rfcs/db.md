@@ -10,7 +10,7 @@
 
 ## 指南级别的解释
 
-方案使用 sqlx 和 postgresql。
+方案使用 sea-orm 和 postgresql。
 
 ## 参考级别解释
 
@@ -19,4 +19,4 @@
 ## 理由和替代方案
 
 数据库可使用 mysql 等其他关系型数据替代。
-sqlx 可使用 sea-orm 或者 desel 代替。
+sea-orm 可使用 sqlx 或者 desel 代替。
