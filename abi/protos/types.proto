@@ -1,0 +1,77 @@
+syntax = "proto3";
+package feel;
+
+//用户基础数据
+message UserBase {
+    int32 id = 1;
+    string nikename = 2;
+    string avatar = 3;
+    string uid = 4;
+    int64 create_at = 5;
+    int64 update_at = 6;
+}
+
+enum AuthType {
+    Email = 0;
+}
+//用户授权数据
+message UserAuth {
+ 
+    int32 id = 1;
+    AuthType auth_type = 2;
+    string auth_name = 3;
+    bytes auth_code = 4;
+}
+
+//用户注册
+message UserRegister {
+    string nikename = 1;
+    string avatar = 2;
+    string uid = 3;
+    AuthType auth_type = 4;
+    string auth_name = 5;
+    bytes auth_code = 6;
+}
+
+//用户登录
+message UserLogin {
+    AuthType auth_type = 4;
+    string auth_name = 5;
+    bytes auth_code = 6;
+}
+
+//用户信息
+message UserInfo {
+    int32 id = 1;
+    string nikename = 2;
+    string avatar = 3;
+    string uid = 4;
+    int64 create_at = 5;
+    int64 update_at = 6;
+}
+
+//用户更新
+message UserUpdate {
+    int32 id = 1;
+    optional string nikename = 2;
+    optional string avatar = 3;
+}
+
+message UserUnregister {
+    int32 id = 1;
+}
+
+message GetUserInfoParams {
+    int32 id = 1;
+}
+
+
+service DbService {
+
+  rpc Register(UserRegister) returns (UserBase);
+  rpc Unregister(UserUnregister) returns (UserBase);
+  rpc Login(UserLogin) returns (UserBase);
+  rpc GetUserInfo(GetUserInfoParams) returns (UserBase);
+  rpc Update(UserUpdate) returns (UserBase);
+
+}
