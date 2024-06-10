@@ -35,6 +35,8 @@ impl Config {
         config.poem.host = env.host;
         config.poem.port = env.port;
 
+        config.db.postgres = env.database_url;
+
         Ok(config)
     }
 }
