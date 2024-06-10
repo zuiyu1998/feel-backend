@@ -23,7 +23,7 @@ pub fn app(config: &Config) -> impl Endpoint {
 }
 
 pub async fn start_server() -> Result<()> {
-    let config = Config::default();
+    let config = Config::load()?;
     tracing_subscriber::fmt::init();
 
     let app = app(&config);

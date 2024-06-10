@@ -1,4 +1,7 @@
-use abi::thiserror::{self, Error};
+use abi::{
+    thiserror::{self, Error},
+    Error as AbiError,
+};
 use std::io::Error as IoError;
 use utils::Error as UtilsError;
 
@@ -14,6 +17,8 @@ pub enum Error {
     IoError(#[from] IoError),
     #[error("utils error: {0}")]
     UtilsError(#[from] UtilsError),
+    #[error("abi error: {0}")]
+    AbiError(#[from] AbiError),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

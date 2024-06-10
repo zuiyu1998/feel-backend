@@ -1,5 +1,41 @@
+use crate::Result;
+use figment::{
+    providers::{Env, Format, Serialized, Yaml},
+    Figment,
+};
 use serde::{Deserialize, Serialize};
 use tonic::async_trait;
+
+#[derive(Debug, Default, Deserialize, Serialize)]
+pub struct EnvConfig {
+    pub database_url: String,
+    pub host: String,
+    pub port: u16,
+}
+
+impl EnvConfig {
+    fn load() -> Result<Self> {
+        dotenvy::dotenv().ok();
+
+        let config: EnvConfig = Figment::new().merge(Env::prefixed("")).extract()?;
+
+        Ok(config)
+    }
+}
+
+impl Config {
+    pub fn load() -> Result<Self> {
+        let env = EnvConfig::load()?;
+        let mut config: Config = Figment::from(Serialized::defaults(Config::default()))
+            .merge(Yaml::file("App.toml"))
+            .extract()?;
+
+        config.poem.host = env.host;
+        config.poem.port = env.port;
+
+        Ok(config)
+    }
+}
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Config {

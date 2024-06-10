@@ -1,5 +1,8 @@
 pub mod config;
+pub mod error;
 pub mod pb;
+
+pub use error::*;
 
 pub use reqwest;
 pub use thiserror;
