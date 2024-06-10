@@ -1,15 +1,16 @@
 mod database;
 mod error;
-mod rpc;
+pub mod rpc;
 
-use abi::config::{Config, FromConfig};
+use abi::config::Config;
 pub use entity::sea_orm;
 pub use error::*;
+use rpc::DbRpcService;
 
 pub async fn start_server() -> Result<()> {
     let config = Config::load()?;
 
-    database::DbRepo::from_config(&config).await?;
+    DbRpcService::start(&config).await?;
 
     Ok(())
 }

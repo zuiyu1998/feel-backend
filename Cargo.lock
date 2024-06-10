@@ -954,6 +954,7 @@ dependencies = [
  "abi",
  "entity",
  "migration",
+ "utils",
 ]
 
 [[package]]

@@ -123,6 +123,26 @@ pub struct RpcServerConfig {
     pub grpc_health_check: GrpcHealthCheck,
 }
 
+impl RpcServerConfig {
+    #[inline]
+    pub fn rpc_server_url(&self) -> String {
+        format!("{}:{}", self.host, self.port)
+    }
+
+    #[inline]
+    pub fn url(&self, https: bool) -> String {
+        url(https, &self.host, self.port)
+    }
+}
+
+fn url(https: bool, host: &str, port: u16) -> String {
+    if https {
+        format!("https://{}:{}", host, port)
+    } else {
+        format!("http://{}:{}", host, port)
+    }
+}
+
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct GrpcHealthCheck {
     pub grpc_use_tls: bool,
