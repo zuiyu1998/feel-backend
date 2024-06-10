@@ -1,7 +1,10 @@
-use sea_orm::entity::prelude::*;
+use abi::pb::types::{UserBase, UserRegister};
+use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
 use chrono::NaiveDateTime;
+
+use crate::utils::get_now;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "user_base")]
@@ -19,3 +22,33 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+impl IntoActiveModel<ActiveModel> for UserRegister {
+    fn into_active_model(self) -> ActiveModel {
+        let mut model: ActiveModel = Default::default();
+
+        let now = get_now();
+
+        model.nikename = Set(self.nikename);
+        model.avatar = Set(self.avatar);
+        model.uid = Set(self.uid);
+
+        model.create_at = Set(now.clone());
+        model.update_at = Set(now);
+
+        model
+    }
+}
+
+impl From<Model> for UserBase {
+    fn from(value: Model) -> Self {
+        UserBase {
+            id: value.id,
+            nikename: value.nikename,
+            avatar: value.avatar,
+            uid: value.uid,
+            create_at: value.create_at.and_utc().timestamp(),
+            update_at: value.update_at.and_utc().timestamp(),
+        }
+    }
+}
