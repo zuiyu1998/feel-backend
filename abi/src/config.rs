@@ -24,10 +24,12 @@ impl EnvConfig {
 }
 
 impl Config {
+    pub const DEFAYLT_PATH: &'static str = "./config.yaml";
+
     pub fn load() -> Result<Self> {
         let env = EnvConfig::load()?;
         let mut config: Config = Figment::from(Serialized::defaults(Config::default()))
-            .merge(Yaml::file("App.toml"))
+            .merge(Yaml::file(Self::DEFAYLT_PATH))
             .extract()?;
 
         config.poem.host = env.host;
