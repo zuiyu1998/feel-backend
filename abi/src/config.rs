@@ -42,9 +42,14 @@ impl Config {
 #[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Config {
     pub poem: PoemConfig,
-
+    pub db: DbConfig,
     pub service_center: ServiceCenterConfig,
     pub rpc: RpcConfig,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct DbConfig {
+    pub postgres: String,
 }
 
 impl Default for RpcConfig {

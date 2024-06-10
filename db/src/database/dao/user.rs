@@ -1,5 +1,5 @@
+use crate::sea_orm::DatabaseConnection;
 use crate::{database::UserRepo, Result};
-use sea_orm::DatabaseConnection;
 
 use abi::{
     pb::types::{GetUserInfoParam, UserBase, UserLogin, UserRegister, UserUnregister, UserUpdate},
