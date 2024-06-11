@@ -1,9 +1,41 @@
-use abi::pb::types::{AuthType, UserLogin, UserRegister};
+use abi::pb::types::{AuthType, UserBase, UserLogin, UserRegister};
 use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use validator::{
     Validate, ValidateEmail, ValidateLength, ValidateUrl, ValidationError, ValidationErrors,
 };
+
+#[derive(Deserialize, Serialize, Object)]
+pub struct UserBaseResponse {
+    pub id: i32,
+    pub nikename: String,
+    pub avatar: String,
+    pub uid: String,
+    pub create_at: i64,
+    pub update_at: i64,
+}
+
+impl UserBaseResponse {
+    pub fn from_user_base(user: UserBase) -> Self {
+        let UserBase {
+            id,
+            nikename,
+            avatar,
+            uid,
+            create_at,
+            update_at,
+        } = user;
+
+        UserBaseResponse {
+            id,
+            nikename,
+            avatar,
+            uid,
+            create_at,
+            update_at,
+        }
+    }
+}
 
 #[derive(Deserialize, Serialize, Object)]
 pub struct UserLoginRequest {

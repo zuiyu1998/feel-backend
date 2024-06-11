@@ -1,3 +1,7 @@
+mod auth;
+
+pub use auth::*;
+
 use poem_openapi::{
     error::ParseRequestPayloadError,
     payload::Json,

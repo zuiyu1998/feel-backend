@@ -1,6 +1,6 @@
 mod dto;
 
-use abi::tonic::Request;
+use abi::{pb::types::GetUserInfoParam, tonic::Request};
 use poem::{error::Result, web::Data};
 use poem_openapi::{payload::Json, OpenApi};
 use validator::Validate;
@@ -55,5 +55,24 @@ impl UserApi {
         let token = state.jwt_helper.encode(&user_base.id.to_string())?;
 
         Ok(GenericResponse::ok(token))
+    }
+
+    #[oai(path = "/get_user_info", method = "post")]
+    async fn get_user_info(
+        &self,
+        Data(state): Data<&AppState>,
+        UserId(user_id): UserId,
+    ) -> Result<GenericResponse<UserBaseResponse>> {
+        let mut db_rpc = state.db_rpc.clone();
+
+        let user_base = db_rpc
+            .get_user_info(Request::new(GetUserInfoParam { id: user_id }))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?
+            .into_inner();
+
+        Ok(GenericResponse::ok(UserBaseResponse::from_user_base(
+            user_base,
+        )))
     }
 }
