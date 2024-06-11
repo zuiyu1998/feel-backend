@@ -1,9 +1,15 @@
-use abi::tokio;
+use abi::{config::Config, tokio, tracing::Level, tracing_subscriber};
 
 use db::{start_server, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    start_server().await?;
+    let config = Config::load()?;
+
+    tracing_subscriber::fmt()
+        .with_max_level(Level::DEBUG)
+        .init();
+
+    start_server(&config).await?;
     Ok(())
 }
