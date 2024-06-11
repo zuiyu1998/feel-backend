@@ -27,6 +27,18 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(UserAuthColumn::AuthCode).binary().not_null())
                     .col(
+                        ColumnDef::new(UserAuthColumn::IsDelete)
+                            .boolean()
+                            .default(false)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(UserAuthColumn::IsEnable)
+                            .boolean()
+                            .default(true)
+                            .not_null(),
+                    )
+                    .col(
                         ColumnDef::new(UserAuthColumn::AuthType)
                             .integer()
                             .not_null(),

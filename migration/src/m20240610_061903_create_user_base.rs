@@ -28,6 +28,18 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(UserBaseColumn::Avatar).string().not_null())
                     .col(ColumnDef::new(UserBaseColumn::Uid).string().not_null())
                     .col(
+                        ColumnDef::new(UserBaseColumn::IsDelete)
+                            .boolean()
+                            .default(false)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(UserBaseColumn::IsEnable)
+                            .boolean()
+                            .default(true)
+                            .not_null(),
+                    )
+                    .col(
                         ColumnDef::new(UserBaseColumn::CreateAt)
                             .date_time()
                             .not_null(),

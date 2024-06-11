@@ -16,6 +16,8 @@ pub struct Model {
     pub uid: String,
     pub create_at: NaiveDateTime,
     pub update_at: NaiveDateTime,
+    pub is_delete: bool,
+    pub is_enable: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

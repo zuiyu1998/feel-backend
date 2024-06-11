@@ -10,6 +10,8 @@ pub struct Model {
     pub auth_type: i32,
     pub auth_name: String,
     pub auth_code: Vec<u8>,
+    pub is_delete: bool,
+    pub is_enable: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
