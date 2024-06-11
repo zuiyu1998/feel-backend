@@ -11,7 +11,7 @@ use crate::state::AppState;
     key_in = "header",
     checker = "api_checker"
 )]
-pub struct UserId(pub i32);
+pub struct Authorization(pub i32);
 
 async fn api_checker(req: &Request, bearer: Bearer) -> Option<i32> {
     let state = req.data::<AppState>();

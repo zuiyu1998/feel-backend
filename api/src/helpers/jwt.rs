@@ -8,8 +8,8 @@ use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 
 pub struct JwtHelper {
-    secret: String,
-    days: i32,
+    pub secret: String,
+    pub days: i32,
 }
 
 #[async_trait]
@@ -67,5 +67,24 @@ impl JwtHelper {
         )?;
 
         Ok(token_data.claims.sub)
+    }
+}
+
+mod test {
+
+    #[test]
+    fn test_jwt_helper() {
+        use super::JwtHelper;
+
+        let helper = JwtHelper {
+            secret: "secret".to_string(),
+            days: 10,
+        };
+
+        let token = helper.encode("1").unwrap();
+
+        let target = helper.decode(&token).unwrap();
+
+        assert_eq!("1", target);
     }
 }

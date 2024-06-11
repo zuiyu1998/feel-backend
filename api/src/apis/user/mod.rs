@@ -64,7 +64,7 @@ impl UserApi {
     async fn get_user_info(
         &self,
         Data(state): Data<&AppState>,
-        UserId(user_id): UserId,
+        Authorization(user_id): Authorization,
     ) -> Result<GenericResponse<UserBaseResponse>> {
         let mut db_rpc = state.db_rpc.clone();
 
@@ -83,7 +83,7 @@ impl UserApi {
     async fn unregister(
         &self,
         Data(state): Data<&AppState>,
-        UserId(user_id): UserId,
+        Authorization(user_id): Authorization,
     ) -> Result<GenericResponse<UserBaseResponse>> {
         let mut db_rpc = state.db_rpc.clone();
 
