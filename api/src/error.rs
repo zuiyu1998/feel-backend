@@ -5,6 +5,9 @@ use abi::{
 use std::{error::Error as StdError, io::Error as IoError};
 use utils::Error as UtilsError;
 
+use crate::apis::utils::*;
+use poem::{Body, Response};
+
 #[derive(Debug, Error)]
 pub enum Kind {}
 
@@ -33,4 +36,23 @@ impl From<Error> for poem::Error {
 
         poem::Error::from(error)
     }
+}
+
+pub async fn handle_error(e: Error) -> Response {
+    let msg = e.to_string();
+
+    let builder = Response::builder();
+
+    let mut body = ResponseObject::<String>::error(&msg);
+
+    match e {
+        Error::RequestError(_) => body.code = ResponseCode::InvalidRequest as i32,
+        _ => {}
+    }
+
+    let body = Body::from_json(body).unwrap();
+
+    let res = builder.body(body);
+
+    res
 }

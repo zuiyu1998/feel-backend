@@ -24,6 +24,7 @@ pub fn app(config: &Config) -> impl Endpoint {
     Route::new()
         .nest(config.poem.get_url_prefix(), api_service)
         .nest("/", ui)
+        .catch_error(|e| handle_error(e))
 }
 
 pub async fn start_server(config: &Config) -> Result<()> {

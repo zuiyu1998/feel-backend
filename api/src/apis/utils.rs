@@ -13,17 +13,27 @@ pub enum ResponseCode {
     Success = 10000,
     Unknown = -10000,
     InvalidRequest = -2,
-    Error = 500,
+    InternalServerError = 500,
 }
 
 #[derive(Deserialize, Serialize, Object)]
 pub struct Empty;
 
-#[derive(Object)]
+#[derive(Object, Serialize, Deserialize)]
 pub struct ResponseObject<T: ParseFromJSON + ToJSON + Send + Sync> {
-    code: i32,
+    pub code: i32,
     msg: String,
     data: Option<T>,
+}
+
+impl<T: ParseFromJSON + ToJSON> ResponseObject<T> {
+    pub fn error(message: &str) -> Self {
+        ResponseObject {
+            code: ResponseCode::InternalServerError as i32,
+            msg: message.to_string(),
+            data: None,
+        }
+    }
 }
 
 #[derive(ApiResponse)]
@@ -45,11 +55,7 @@ impl<T: ParseFromJSON + ToJSON> GenericResponse<T> {
     }
 
     pub fn error(message: &str) -> Self {
-        GenericResponse::Error(Json(ResponseObject {
-            code: ResponseCode::Error as i32,
-            msg: message.to_string(),
-            data: None,
-        }))
+        GenericResponse::Error(Json(ResponseObject::error(message)))
     }
 }
 

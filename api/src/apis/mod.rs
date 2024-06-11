@@ -1,5 +1,5 @@
 mod user;
-mod utils;
+pub mod utils;
 
 use poem_openapi::OpenApi;
 
