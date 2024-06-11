@@ -41,7 +41,7 @@ impl From<Error> for poem::Error {
 pub async fn handle_error(e: Error) -> Response {
     let msg = e.to_string();
 
-    let builder = Response::builder();
+    let builder = Response::builder().content_type("application/json; charset=utf-8");
 
     let mut body = ResponseObject::<String>::error(&msg);
 
