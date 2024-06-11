@@ -54,8 +54,8 @@ pub struct UserLogin {
     pub auth_type: i32,
     #[prost(string, tag = "5")]
     pub auth_name: ::prost::alloc::string::String,
-    #[prost(bytes = "vec", tag = "6")]
-    pub auth_code: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag = "6")]
+    pub auth_code: ::prost::alloc::string::String,
 }
 /// 用户信息
 #[allow(clippy::derive_partial_eq_without_eq)]

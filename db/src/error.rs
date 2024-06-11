@@ -8,7 +8,14 @@ use std::io::Error as IoError;
 use utils::Error as UtilsError;
 
 #[derive(Debug, Error)]
-pub enum Kind {}
+pub enum Kind {
+    #[error("UserNotFound")]
+    UserNotFound,
+    #[error("AuthNotFound")]
+    AuthNotFound,
+    #[error("PasswordError")]
+    PasswordError,
+}
 
 #[derive(Debug, Error)]
 

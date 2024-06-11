@@ -43,6 +43,7 @@ impl MigrationTrait for Migration {
                             .integer()
                             .not_null(),
                     )
+                    .col(ColumnDef::new(UserAuthColumn::UserId).integer().not_null())
                     .to_owned(),
             )
             .await
