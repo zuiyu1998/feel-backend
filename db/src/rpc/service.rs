@@ -22,7 +22,10 @@ impl DbService for DbRpcService {
         &self,
         request: Request<UserUnregister>,
     ) -> Result<Response<UserBase>, Status> {
-        todo!()
+        let req = request.into_inner();
+        let user = self.db.user.unregister(req).await?;
+
+        Ok(Response::new(user))
     }
 
     async fn login(&self, request: Request<UserLogin>) -> Result<Response<UserBase>, Status> {

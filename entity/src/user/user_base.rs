@@ -1,4 +1,4 @@
-use abi::pb::types::{UserBase, UserRegister};
+use abi::pb::types::{UserBase, UserRegister, UserUnregister};
 use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
@@ -36,6 +36,22 @@ impl IntoActiveModel<ActiveModel> for UserRegister {
         model.uid = Set(self.uid);
 
         model.create_at = Set(now.clone());
+        model.update_at = Set(now);
+
+        model
+    }
+}
+
+impl IntoActiveModel<ActiveModel> for UserUnregister {
+    fn into_active_model(self) -> ActiveModel {
+        let mut model: ActiveModel = Default::default();
+
+        let now = get_now();
+
+        model.is_delete = Set(true);
+        model.is_enable = Set(false);
+        model.id = Set(self.id);
+
         model.update_at = Set(now);
 
         model

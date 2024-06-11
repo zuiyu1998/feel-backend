@@ -37,8 +37,12 @@ impl UserRepo for DaoUser {
 
         Ok(UserBase::from(user_model))
     }
-    async fn unregister(&self, _unregister: UserUnregister) -> Result<UserBase> {
-        todo!()
+    async fn unregister(&self, unregister: UserUnregister) -> Result<UserBase> {
+        let user_model: UserBaseActiveModel = unregister.into_active_model();
+
+        let user_model = user_model.update(&self.connection).await?;
+
+        Ok(UserBase::from(user_model))
     }
     async fn login(&self, _login: UserLogin) -> Result<UserBase> {
         todo!()
