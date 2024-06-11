@@ -2,6 +2,7 @@ use abi::{
     thiserror::{self, Error},
     Error as AbiError,
 };
+use jsonwebtoken::errors::Error as JsonwebtokenError;
 use std::{error::Error as StdError, io::Error as IoError};
 use utils::Error as UtilsError;
 
@@ -26,6 +27,8 @@ pub enum Error {
     InternalServer(String),
     #[error("request error: {0}")]
     RequestError(String),
+    #[error("jwt error: {0}")]
+    JsonwebtokenError(#[from] JsonwebtokenError),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

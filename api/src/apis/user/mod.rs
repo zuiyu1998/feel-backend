@@ -33,4 +33,27 @@ impl UserApi {
 
         Ok(GenericResponse::ok(Empty))
     }
+
+    #[oai(path = "/register", method = "post")]
+    async fn login(
+        &self,
+        Data(state): Data<&AppState>,
+        Json(login): Json<UserLoginRequest>,
+    ) -> Result<GenericResponse<String>> {
+        login
+            .validate()
+            .map_err(|e| Error::RequestError(e.to_string()))?;
+
+        let mut db_rpc = state.db_rpc.clone();
+
+        let user_base = db_rpc
+            .login(Request::new(login.into_inner()))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?
+            .into_inner();
+
+        let token = state.jwt_helper.encode(&user_base.id.to_string())?;
+
+        Ok(GenericResponse::ok(token))
+    }
 }

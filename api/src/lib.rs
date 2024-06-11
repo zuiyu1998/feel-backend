@@ -3,6 +3,8 @@ mod error;
 mod apis;
 mod state;
 
+pub mod helpers;
+
 pub use error::*;
 
 use abi::{

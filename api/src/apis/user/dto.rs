@@ -1,4 +1,4 @@
-use abi::pb::types::{AuthType, UserRegister};
+use abi::pb::types::{AuthType, UserLogin, UserRegister};
 use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use validator::{
@@ -6,21 +6,59 @@ use validator::{
 };
 
 #[derive(Deserialize, Serialize, Object)]
-pub struct UserRegisterRequest {
-    pub nikename: String,
-    pub avatar: String,
-    pub uid: String,
+pub struct UserLoginRequest {
+    // 授权方式，目前仅实现了Email
     pub auth_type: String,
     pub auth_name: String,
     pub auth_code: String,
 }
 
-fn get_validation_errors(field: &'static str, code: &'static str) -> ValidationErrors {
-    let mut errors = ValidationErrors::new();
+impl Validate for UserLoginRequest {
+    fn validate(&self) -> Result<(), ValidationErrors> {
+        if let Some(auth) = AuthType::from_str_name(&self.auth_type) {
+            match auth {
+                AuthType::Email => {
+                    if !self.auth_name.validate_email() {
+                        return Err(get_validation_errors(
+                            "auth_name",
+                            "auth_name is invaild email",
+                        ));
+                    }
+                }
+            }
+        } else {
+            return Err(get_validation_errors("auth_type", "auth_type is invaild"));
+        }
 
-    errors.add(&field, ValidationError::new(code));
+        Ok(())
+    }
+}
 
-    errors
+impl UserLoginRequest {
+    pub fn into_inner(self) -> UserLogin {
+        let UserLoginRequest {
+            auth_type,
+            auth_name,
+            auth_code,
+        } = self;
+
+        UserLogin {
+            auth_type: AuthType::from_str_name(&auth_type).unwrap() as i32,
+            auth_name,
+            auth_code,
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Object)]
+pub struct UserRegisterRequest {
+    pub nikename: String,
+    pub avatar: String,
+    pub uid: String,
+    // 授权方式，目前仅实现了Email
+    pub auth_type: String,
+    pub auth_name: String,
+    pub auth_code: String,
 }
 
 impl Validate for UserRegisterRequest {
@@ -75,4 +113,12 @@ impl UserRegisterRequest {
             auth_code,
         }
     }
+}
+
+fn get_validation_errors(field: &'static str, code: &'static str) -> ValidationErrors {
+    let mut errors = ValidationErrors::new();
+
+    errors.add(&field, ValidationError::new(code));
+
+    errors
 }

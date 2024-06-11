@@ -167,6 +167,22 @@ pub struct PoemConfig {
     pub port: u16,
     pub api_prefix: String,
     pub api_prefix_version: String,
+    pub jwt: JwtOptions,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct JwtOptions {
+    pub secret: String,
+    pub days: i32,
+}
+
+impl Default for JwtOptions {
+    fn default() -> Self {
+        JwtOptions {
+            secret: "secret".to_string(),
+            days: 30,
+        }
+    }
 }
 
 impl Default for PoemConfig {
@@ -178,6 +194,7 @@ impl Default for PoemConfig {
             port: 3000,
             api_prefix: "api".to_owned(),
             api_prefix_version: "v1".to_owned(),
+            jwt: Default::default(),
         }
     }
 }

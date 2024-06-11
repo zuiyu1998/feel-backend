@@ -4,6 +4,7 @@ pub mod pb;
 
 pub use error::*;
 
+pub use chrono;
 pub use reqwest;
 pub use thiserror;
 pub use tokio;

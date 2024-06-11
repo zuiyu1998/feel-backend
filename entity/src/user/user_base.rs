@@ -2,7 +2,7 @@ use abi::pb::types::{UserBase, UserRegister, UserUnregister, UserUpdate};
 use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
-use chrono::NaiveDateTime;
+use abi::chrono::NaiveDateTime;
 
 use crate::utils::get_now;
 

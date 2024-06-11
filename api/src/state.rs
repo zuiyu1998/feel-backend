@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use abi::{
     config::{Config, FromConfig},
     pb::types::db_service_client::DbServiceClient,
@@ -5,11 +7,12 @@ use abi::{
 };
 use utils::service_discovery::LbWithServiceDiscovery;
 
-use crate::Error;
+use crate::{helpers::JwtHelper, Error};
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct AppState {
     pub db_rpc: DbServiceClient<LbWithServiceDiscovery>,
+    pub jwt_helper: Arc<JwtHelper>,
 }
 
 #[async_trait]
@@ -19,6 +22,8 @@ impl FromConfig for AppState {
     async fn from_config(config: &Config) -> Result<Self, Self::Error> {
         let db_rpc = utils::helpers::get_rpc_client(&config, &config.rpc.db.name).await?;
 
-        Ok(AppState { db_rpc })
+        let jwt_helper = Arc::new(JwtHelper::from_config(config).await?);
+
+        Ok(AppState { db_rpc, jwt_helper })
     }
 }
