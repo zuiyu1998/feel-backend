@@ -2,7 +2,7 @@ use abi::{
     thiserror::{self, Error},
     Error as AbiError,
 };
-use std::io::Error as IoError;
+use std::{error::Error as StdError, io::Error as IoError};
 use utils::Error as UtilsError;
 
 #[derive(Debug, Error)]
@@ -19,6 +19,16 @@ pub enum Error {
     UtilsError(#[from] UtilsError),
     #[error("abi error: {0}")]
     AbiError(#[from] AbiError),
+    #[error("internal serve error: {0}")]
+    InternalServer(String),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
+
+impl From<Error> for poem::Error {
+    fn from(value: Error) -> Self {
+        let error: Box<dyn StdError + Send + Sync> = Box::new(value);
+
+        poem::Error::from(error)
+    }
+}

@@ -192,6 +192,7 @@ dependencies = [
  "abi",
  "poem",
  "poem-openapi",
+ "serde",
  "utils",
 ]
 

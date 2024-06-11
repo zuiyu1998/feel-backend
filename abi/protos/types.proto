@@ -30,7 +30,7 @@ message UserRegister {
     string uid = 3;
     AuthType auth_type = 4;
     string auth_name = 5;
-    bytes auth_code = 6;
+    string auth_code = 6;
 }
 
 //用户登录

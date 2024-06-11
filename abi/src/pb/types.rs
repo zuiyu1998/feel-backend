@@ -43,8 +43,8 @@ pub struct UserRegister {
     pub auth_type: i32,
     #[prost(string, tag = "5")]
     pub auth_name: ::prost::alloc::string::String,
-    #[prost(bytes = "vec", tag = "6")]
-    pub auth_code: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag = "6")]
+    pub auth_code: ::prost::alloc::string::String,
 }
 /// 用户登录
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -97,7 +97,19 @@ pub struct GetUserInfoParam {
     #[prost(int32, tag = "1")]
     pub id: i32,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[derive(
+    serde::Serialize,
+    serde::Deserialize,
+    Clone,
+    Copy,
+    Debug,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    ::prost::Enumeration,
+)]
 #[repr(i32)]
 pub enum AuthType {
     Email = 0,

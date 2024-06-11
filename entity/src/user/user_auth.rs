@@ -23,7 +23,7 @@ impl IntoActiveModel<ActiveModel> for UserRegister {
 
         model.auth_type = Set(self.auth_type);
         model.auth_name = Set(self.auth_name);
-        model.auth_code = Set(self.auth_code);
+        // model.auth_code = Set(self.auth_code);
 
         model
     }

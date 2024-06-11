@@ -5,7 +5,7 @@ mod state;
 
 pub use error::*;
 
-use abi::{config::Config, tracing, tracing_subscriber};
+use abi::{config::Config, tracing};
 use apis::get_apis;
 
 use poem::{listener::TcpListener, Endpoint, Route, Server};
@@ -22,10 +22,7 @@ pub fn app(config: &Config) -> impl Endpoint {
         .nest("/", ui)
 }
 
-pub async fn start_server() -> Result<()> {
-    let config = Config::load()?;
-    tracing_subscriber::fmt::init();
-
+pub async fn start_server(config: &Config) -> Result<()> {
     let app = app(&config);
 
     let bind_addr = config.poem.get_bind_addr();
