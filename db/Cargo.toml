@@ -10,3 +10,5 @@ abi = { path = "../abi" }
 migration = { path = "../migration" }
 entity = { path = "../entity" }
 utils = { path = "../utils" }
+
+sha2 = { version = "0.10" }

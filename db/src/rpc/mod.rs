@@ -14,10 +14,11 @@ use utils::{
     synapse::health::{HealthServer, HealthService},
 };
 
-use crate::{database::DbRepo, Error, Result};
+use crate::{database::DbRepo, helpers::ShaHelper, Error, Result};
 
 pub struct DbRpcService {
     db: Arc<DbRepo>,
+    sha_helper: Arc<ShaHelper>,
 }
 
 impl DbRpcService {
@@ -52,7 +53,8 @@ impl FromConfig for DbRpcService {
 
     async fn from_config(config: &Config) -> Result<Self> {
         let db = Arc::new(DbRepo::from_config(config).await?);
+        let sha_helper = Arc::new(ShaHelper::from_config(config).await?);
 
-        Ok(DbRpcService { db })
+        Ok(DbRpcService { db, sha_helper })
     }
 }

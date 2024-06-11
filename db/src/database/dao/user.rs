@@ -1,3 +1,4 @@
+use crate::helpers::ShaHelper;
 use crate::sea_orm::DatabaseConnection;
 use crate::{database::UserRepo, Result};
 
@@ -6,7 +7,7 @@ use abi::{
     tonic::async_trait,
 };
 use entity::{
-    sea_orm::{ActiveModelTrait, IntoActiveModel},
+    sea_orm::{ActiveModelTrait, IntoActiveModel, Set},
     user::{UserAuthActiveModel, UserBaseActiveModel},
 };
 
@@ -23,12 +24,14 @@ impl DaoUser {
 
 #[async_trait]
 impl UserRepo for DaoUser {
-    async fn register(&self, register: UserRegister) -> Result<UserBase> {
+    async fn register(&self, register: UserRegister, sha_helper: &ShaHelper) -> Result<UserBase> {
         let user_model: UserBaseActiveModel = register.clone().into_active_model();
 
         let user_model = user_model.insert(&self.connection).await?;
 
-        let auth_model: UserAuthActiveModel = register.into_active_model();
+        let encode_data = sha_helper.encode(register.auth_code.as_bytes());
+        let mut auth_model: UserAuthActiveModel = register.into_active_model();
+        auth_model.auth_code = Set(encode_data);
 
         let _auth_model = auth_model.insert(&self.connection).await?;
 

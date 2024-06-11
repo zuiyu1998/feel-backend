@@ -49,9 +49,19 @@ pub struct Config {
     pub rpc: RpcConfig,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct DbConfig {
     pub postgres: String,
+    pub secure: String,
+}
+
+impl Default for DbConfig {
+    fn default() -> Self {
+        DbConfig {
+            postgres: "".to_string(),
+            secure: "secure".to_string(),
+        }
+    }
 }
 
 impl Default for RpcConfig {

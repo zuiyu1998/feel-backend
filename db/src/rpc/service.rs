@@ -13,7 +13,7 @@ impl DbService for DbRpcService {
     async fn register(&self, request: Request<UserRegister>) -> Result<Response<UserBase>, Status> {
         let req = request.into_inner();
 
-        let user = self.db.user.register(req).await?;
+        let user = self.db.user.register(req, &self.sha_helper).await?;
 
         Ok(Response::new(user))
     }

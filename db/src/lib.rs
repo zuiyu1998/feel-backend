@@ -1,5 +1,7 @@
 mod database;
 mod error;
+
+pub mod helpers;
 pub mod rpc;
 
 use abi::config::Config;

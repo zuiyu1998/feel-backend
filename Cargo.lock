@@ -955,6 +955,7 @@ dependencies = [
  "abi",
  "entity",
  "migration",
+ "sha2",
  "utils",
 ]
 
