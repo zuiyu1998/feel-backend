@@ -7,7 +7,7 @@ use validator::{
 
 #[derive(Deserialize, Serialize, Object)]
 pub struct UserLoginRequest {
-    // 授权方式，目前仅实现了Email
+    /// 授权方式，目前仅实现了Email
     pub auth_type: String,
     pub auth_name: String,
     pub auth_code: String,
@@ -55,7 +55,7 @@ pub struct UserRegisterRequest {
     pub nikename: String,
     pub avatar: String,
     pub uid: String,
-    // 授权方式，目前仅实现了Email
+    /// 授权方式，目前仅实现了Email
     pub auth_type: String,
     pub auth_name: String,
     pub auth_code: String,

@@ -12,7 +12,7 @@ use dto::*;
 
 pub struct UserApi;
 
-#[OpenApi(prefix_path = "/user")]
+#[OpenApi(prefix_path = "/user", tag = "super::ApiTags::UserApi")]
 impl UserApi {
     #[oai(path = "/register", method = "post")]
     async fn register(
@@ -34,7 +34,7 @@ impl UserApi {
         Ok(GenericResponse::ok(Empty))
     }
 
-    #[oai(path = "/register", method = "post")]
+    #[oai(path = "/login", method = "post")]
     async fn login(
         &self,
         Data(state): Data<&AppState>,
