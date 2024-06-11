@@ -12,3 +12,4 @@ utils = { path = "../utils" }
 poem = { version = "3.0" }
 poem-openapi = { version = "5.0", features = ["swagger-ui"] }
 serde = { version = "1.0", features = ["derive"] }
+validator = { version = "0.18", features = ["derive"] }

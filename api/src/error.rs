@@ -19,8 +19,10 @@ pub enum Error {
     UtilsError(#[from] UtilsError),
     #[error("abi error: {0}")]
     AbiError(#[from] AbiError),
-    #[error("internal serve error: {0}")]
+    #[error("internal server error: {0}")]
     InternalServer(String),
+    #[error("request error: {0}")]
+    RequestError(String),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
