@@ -1,6 +1,9 @@
 mod dto;
 
-use abi::{pb::types::GetUserInfoParam, tonic::Request};
+use abi::{
+    pb::types::{GetUserInfoParam, UserUnregister},
+    tonic::Request,
+};
 use poem::{error::Result, web::Data};
 use poem_openapi::{payload::Json, OpenApi};
 use validator::Validate;
@@ -67,6 +70,25 @@ impl UserApi {
 
         let user_base = db_rpc
             .get_user_info(Request::new(GetUserInfoParam { id: user_id }))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?
+            .into_inner();
+
+        Ok(GenericResponse::ok(UserBaseResponse::from_user_base(
+            user_base,
+        )))
+    }
+
+    #[oai(path = "/unregister", method = "post")]
+    async fn unregister(
+        &self,
+        Data(state): Data<&AppState>,
+        UserId(user_id): UserId,
+    ) -> Result<GenericResponse<UserBaseResponse>> {
+        let mut db_rpc = state.db_rpc.clone();
+
+        let user_base = db_rpc
+            .unregister(Request::new(UserUnregister { id: user_id }))
             .await
             .map_err(|e| Error::InternalServer(e.to_string()))?
             .into_inner();
