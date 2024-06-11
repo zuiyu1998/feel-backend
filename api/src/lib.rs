@@ -5,11 +5,15 @@ mod state;
 
 pub use error::*;
 
-use abi::{config::Config, tracing};
+use abi::{
+    config::{Config, FromConfig},
+    tracing,
+};
 use apis::get_apis;
 
-use poem::{listener::TcpListener, Endpoint, Route, Server};
+use poem::{listener::TcpListener, middleware::Tracing, Endpoint, EndpointExt, Route, Server};
 use poem_openapi::OpenApiService;
+use state::AppState;
 
 pub fn app(config: &Config) -> impl Endpoint {
     let api_service =
@@ -23,7 +27,9 @@ pub fn app(config: &Config) -> impl Endpoint {
 }
 
 pub async fn start_server(config: &Config) -> Result<()> {
-    let app = app(&config);
+    let state = AppState::from_config(config).await?;
+
+    let app = app(&config).with(Tracing::default()).data(state);
 
     let bind_addr = config.poem.get_bind_addr();
 

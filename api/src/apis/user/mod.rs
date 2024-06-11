@@ -1,11 +1,8 @@
 mod dto;
 
 use abi::tonic::Request;
-use poem::{
-    error::Result,
-    web::{Data, Json},
-};
-use poem_openapi::OpenApi;
+use poem::{error::Result, web::Data};
+use poem_openapi::{payload::Json, OpenApi};
 
 use super::utils::*;
 use crate::{state::AppState, Error};
