@@ -93,8 +93,13 @@ impl UserRepo for DaoUser {
 
         Ok(UserBase::from(user_model))
     }
-    async fn get_user_info(&self, _param: GetUserInfoParam) -> Result<UserBase> {
-        todo!()
+    async fn get_user_info(&self, param: GetUserInfoParam) -> Result<UserBase> {
+        let user_model = self
+            .find_user_by_id(param.id)
+            .await?
+            .ok_or(Kind::UserNotFound)?;
+
+        Ok(UserBase::from(user_model))
     }
     async fn update(&self, _update: UserUpdate) -> Result<UserBase> {
         todo!()

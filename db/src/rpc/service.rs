@@ -29,17 +29,26 @@ impl DbService for DbRpcService {
     }
 
     async fn login(&self, request: Request<UserLogin>) -> Result<Response<UserBase>, Status> {
-        todo!()
+        let req = request.into_inner();
+        let user = self.db.user.login(req, &self.sha_helper).await?;
+
+        Ok(Response::new(user))
     }
 
     async fn get_user_info(
         &self,
         request: Request<GetUserInfoParam>,
     ) -> Result<Response<UserBase>, Status> {
-        todo!()
+        let req = request.into_inner();
+        let user = self.db.user.get_user_info(req).await?;
+
+        Ok(Response::new(user))
     }
 
     async fn update(&self, request: Request<UserUpdate>) -> Result<Response<UserBase>, Status> {
-        todo!()
+        let req = request.into_inner();
+        let user = self.db.user.update(req).await?;
+
+        Ok(Response::new(user))
     }
 }
