@@ -1,7 +1,7 @@
 mod dto;
 
 use abi::{
-    pb::types::{GetUserInfoParam, UserUnregister},
+    pb::types::{GetUserInfoParams, UserUnregister},
     tonic::Request,
 };
 use poem::{error::Result, web::Data};
@@ -69,7 +69,7 @@ impl UserApi {
         let mut db_rpc = state.db_rpc.clone();
 
         let user_base = db_rpc
-            .get_user_info(Request::new(GetUserInfoParam { id: user_id }))
+            .get_user_info(Request::new(GetUserInfoParams { id: user_id }))
             .await
             .map_err(|e| Error::InternalServer(e.to_string()))?
             .into_inner();

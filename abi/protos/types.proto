@@ -1,6 +1,51 @@
 syntax = "proto3";
 package types;
 
+//获取用户印象的参数
+message UserLabelStreamParams {
+    int32 id = 1;
+
+}
+
+//用户创建标签的参数
+message UserLabelCreate {
+    int32 user_id = 1;
+    int32 label_meta_id = 2;
+}
+
+///标签模板创建的参数
+message UserLabelMetaCreate {
+    /// 名称
+    string name = 2;
+    /// 描述
+    string description = 3;
+    ///影响力
+    int64 effct = 4;
+}
+
+///标签
+message UserLabel {
+    /// id
+    int32 id = 1;
+    UserLabelMeta meta = 2;
+    int64 create_at = 3;
+    int64 update_at = 4;
+}
+
+//标签模板
+message UserLabelMeta {
+    /// id
+    int32 id = 1;
+    /// 名称
+    string name = 2;
+    /// 描述
+    string description = 3;
+    ///影响力
+    int64 effct = 4;
+    int64 create_at = 5;
+    int64 update_at = 6;
+}
+
 //用户基础数据
 message UserBase {
     int32 id = 1;
@@ -61,17 +106,28 @@ message UserUnregister {
     int32 id = 1;
 }
 
-message GetUserInfoParam {
+message GetUserInfoParams {
     int32 id = 1;
 }
 
 
 service DbService {
+    /// 创建模板标签
+    rpc CreateLableMeta(UserLabelMetaCreate) returns (UserLabelMeta);
+    /// 用户创建标签
+    rpc CreateUserLable(UserLabelCreate) returns (UserLabel);
+    /// 用户的第一印象
+    rpc GetUserLabelStream(UserLabelStreamParams) returns (stream UserLabel);
 
-  rpc Register(UserRegister) returns (UserBase);
-  rpc Unregister(UserUnregister) returns (UserBase);
-  rpc Login(UserLogin) returns (UserBase);
-  rpc GetUserInfo(GetUserInfoParam) returns (UserBase);
-  rpc Update(UserUpdate) returns (UserBase);
+    /// 注册
+    rpc Register(UserRegister) returns (UserBase);
+    /// 注销
+    rpc Unregister(UserUnregister) returns (UserBase);
+    /// 登录
+    rpc Login(UserLogin) returns (UserBase);
+    /// 获取用户信息
+    rpc GetUserInfo(GetUserInfoParams) returns (UserBase);
+    /// 更新用户信息
+    rpc Update(UserUpdate) returns (UserBase);
 
 }

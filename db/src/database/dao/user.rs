@@ -4,7 +4,7 @@ use crate::Kind;
 use crate::{database::UserRepo, Result};
 
 use abi::{
-    pb::types::{GetUserInfoParam, UserBase, UserLogin, UserRegister, UserUnregister, UserUpdate},
+    pb::types::{GetUserInfoParams, UserBase, UserLogin, UserRegister, UserUnregister, UserUpdate},
     tonic::async_trait,
 };
 use entity::sea_orm::TransactionTrait;
@@ -93,7 +93,7 @@ impl UserRepo for DaoUser {
 
         Ok(UserBase::from(user_model))
     }
-    async fn get_user_info(&self, param: GetUserInfoParam) -> Result<UserBase> {
+    async fn get_user_info(&self, param: GetUserInfoParams) -> Result<UserBase> {
         let user_model = self
             .find_user_by_id(param.id)
             .await?

@@ -9,6 +9,7 @@ dependencies = [
  "chrono",
  "dotenvy",
  "figment",
+ "futures",
  "prost",
  "prost-types",
  "reqwest",
