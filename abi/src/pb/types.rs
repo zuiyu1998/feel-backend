@@ -2,9 +2,25 @@
 /// 获取用户印象的参数
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UserLabelStreamParams {
+pub struct UserLabelParams {
     #[prost(int32, tag = "1")]
     pub id: i32,
+    #[prost(int32, tag = "2")]
+    pub page_size: i32,
+    #[prost(int32, tag = "3")]
+    pub page: i32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UserLabelResponse {
+    #[prost(int32, tag = "1")]
+    pub count: i32,
+    #[prost(int32, tag = "2")]
+    pub page_size: i32,
+    #[prost(int32, tag = "3")]
+    pub page: i32,
+    #[prost(message, repeated, tag = "4")]
+    pub data: ::prost::alloc::vec::Vec<UserLabel>,
 }
 /// 用户创建标签的参数
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -318,13 +334,10 @@ pub mod db_service_client {
             self.inner.unary(req, path, codec).await
         }
         /// / 用户的第一印象
-        pub async fn get_user_label_stream(
+        pub async fn get_user_labels(
             &mut self,
-            request: impl tonic::IntoRequest<super::UserLabelStreamParams>,
-        ) -> std::result::Result<
-            tonic::Response<tonic::codec::Streaming<super::UserLabel>>,
-            tonic::Status,
-        > {
+            request: impl tonic::IntoRequest<super::UserLabelParams>,
+        ) -> std::result::Result<tonic::Response<super::UserLabelResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -332,11 +345,11 @@ pub mod db_service_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/types.DbService/GetUserLabelStream");
+            let path = http::uri::PathAndQuery::from_static("/types.DbService/GetUserLabels");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("types.DbService", "GetUserLabelStream"));
-            self.inner.server_streaming(req, path, codec).await
+                .insert(GrpcMethod::new("types.DbService", "GetUserLabels"));
+            self.inner.unary(req, path, codec).await
         }
         /// / 注册
         pub async fn register(
@@ -447,16 +460,11 @@ pub mod db_service_server {
             &self,
             request: tonic::Request<super::UserLabelCreate>,
         ) -> std::result::Result<tonic::Response<super::UserLabel>, tonic::Status>;
-        /// Server streaming response type for the GetUserLabelStream method.
-        type GetUserLabelStreamStream: tonic::codegen::tokio_stream::Stream<
-                Item = std::result::Result<super::UserLabel, tonic::Status>,
-            > + Send
-            + 'static;
         /// / 用户的第一印象
-        async fn get_user_label_stream(
+        async fn get_user_labels(
             &self,
-            request: tonic::Request<super::UserLabelStreamParams>,
-        ) -> std::result::Result<tonic::Response<Self::GetUserLabelStreamStream>, tonic::Status>;
+            request: tonic::Request<super::UserLabelParams>,
+        ) -> std::result::Result<tonic::Response<super::UserLabelResponse>, tonic::Status>;
         /// / 注册
         async fn register(
             &self,
@@ -641,24 +649,19 @@ pub mod db_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/types.DbService/GetUserLabelStream" => {
+                "/types.DbService/GetUserLabels" => {
                     #[allow(non_camel_case_types)]
-                    struct GetUserLabelStreamSvc<T: DbService>(pub Arc<T>);
-                    impl<T: DbService>
-                        tonic::server::ServerStreamingService<super::UserLabelStreamParams>
-                        for GetUserLabelStreamSvc<T>
-                    {
-                        type Response = super::UserLabel;
-                        type ResponseStream = T::GetUserLabelStreamStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                    struct GetUserLabelsSvc<T: DbService>(pub Arc<T>);
+                    impl<T: DbService> tonic::server::UnaryService<super::UserLabelParams> for GetUserLabelsSvc<T> {
+                        type Response = super::UserLabelResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::UserLabelStreamParams>,
+                            request: tonic::Request<super::UserLabelParams>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as DbService>::get_user_label_stream(&inner, request).await
+                                <T as DbService>::get_user_labels(&inner, request).await
                             };
                             Box::pin(fut)
                         }
@@ -670,7 +673,7 @@ pub mod db_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetUserLabelStreamSvc(inner);
+                        let method = GetUserLabelsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -681,7 +684,7 @@ pub mod db_service_server {
                                 max_decoding_message_size,
                                 max_encoding_message_size,
                             );
-                        let res = grpc.server_streaming(method, req).await;
+                        let res = grpc.unary(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)

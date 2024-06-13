@@ -4,8 +4,8 @@ use abi::{
     futures::Stream,
     pb::types::{
         db_service_server::DbService, GetUserInfoParams, UserBase, UserLabel, UserLabelCreate,
-        UserLabelMeta, UserLabelMetaCreate, UserLabelStreamParams, UserLogin, UserRegister,
-        UserUnregister, UserUpdate,
+        UserLabelMeta, UserLabelMetaCreate, UserLabelParams, UserLabelResponse,
+        UserLabelStreamParams, UserLogin, UserRegister, UserUnregister, UserUpdate,
     },
     tonic::{async_trait, Request, Response, Status},
 };
@@ -14,12 +14,10 @@ use super::DbRpcService;
 
 #[async_trait]
 impl DbService for DbRpcService {
-    type GetUserLabelStreamStream = Pin<Box<dyn Stream<Item = Result<UserLabel, Status>> + Send>>;
-
-    async fn get_user_label_stream(
+    async fn get_user_labels(
         &self,
-        request: Request<UserLabelStreamParams>,
-    ) -> Result<Response<Self::GetUserLabelStreamStream>, Status> {
+        request: Request<UserLabelParams>,
+    ) -> Result<Response<UserLabelResponse>, Status> {
         todo!()
     }
 
