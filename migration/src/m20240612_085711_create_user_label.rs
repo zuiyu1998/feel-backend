@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(
-                        ColumnDef::new(UserLabelColumn::LabelId)
+                        ColumnDef::new(UserLabelColumn::LabelMetaId)
                             .integer()
                             .not_null(),
                     )

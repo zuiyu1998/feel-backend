@@ -1,8 +1,8 @@
 use abi::{
     pb::types::{
-        db_service_server::DbService, GetUserInfoParams, UserBase, UserLabel, UserLabelCreate,
-        UserLabelMeta, UserLabelMetaCreate, UserLabelParams, UserLabelResponse, UserLogin,
-        UserRegister, UserUnregister, UserUpdate,
+        db_service_server::DbService, GetUserInfoParams, UserBase, UserLabelCreate,
+        UserLabelCreateResponse, UserLabelMetaCreate, UserLabelMetaCreateResponse, UserLabelParams,
+        UserLabelResponse, UserLogin, UserRegister, UserUnregister, UserUpdate,
     },
     tonic::{async_trait, Request, Response, Status},
 };
@@ -25,7 +25,7 @@ impl DbService for DbRpcService {
     async fn create_user_lable(
         &self,
         request: Request<UserLabelCreate>,
-    ) -> Result<Response<UserLabel>, Status> {
+    ) -> Result<Response<UserLabelCreateResponse>, Status> {
         let req = request.into_inner();
 
         let res = self.db.label.create_user_lable(req).await?;
@@ -36,7 +36,7 @@ impl DbService for DbRpcService {
     async fn create_lable_meta(
         &self,
         request: Request<UserLabelMetaCreate>,
-    ) -> Result<Response<UserLabelMeta>, Status> {
+    ) -> Result<Response<UserLabelMetaCreateResponse>, Status> {
         let req = request.into_inner();
 
         let res = self.db.label.create_lable_meta(req).await?;

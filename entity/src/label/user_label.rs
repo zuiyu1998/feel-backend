@@ -1,14 +1,14 @@
-use sea_orm::entity::prelude::*;
+use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
-use abi::chrono::NaiveDateTime;
+use abi::{chrono::NaiveDateTime, pb::types::UserLabelCreate};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "user_label")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub label_id: i32,
+    pub label_meta_id: i32,
     pub user_id: i32,
     pub create_at: NaiveDateTime,
     pub update_at: NaiveDateTime,
@@ -20,3 +20,14 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+impl IntoActiveModel<ActiveModel> for UserLabelCreate {
+    fn into_active_model(self) -> ActiveModel {
+        let mut model: ActiveModel = Default::default();
+
+        model.user_id = Set(self.user_id);
+        model.label_meta_id = Set(self.label_meta_id);
+
+        model
+    }
+}

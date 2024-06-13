@@ -1,10 +1,14 @@
-use crate::{database::LabelRepo, sea_orm::DatabaseConnection, Result};
+use crate::{database::LabelRepo, Result};
 
 use abi::pb::types::{
-    UserLabel, UserLabelCreate, UserLabelMeta, UserLabelMetaCreate, UserLabelParams,
-    UserLabelResponse,
+    UserLabelCreate, UserLabelCreateResponse, UserLabelMetaCreate, UserLabelMetaCreateResponse,
+    UserLabelParams, UserLabelResponse,
 };
 use abi::tonic::async_trait;
+use entity::{
+    label::{LabelMetaActiveModel, UserLabelActiveModel},
+    sea_orm::{ActiveModelTrait, DatabaseConnection, IntoActiveModel},
+};
 
 #[derive(Debug)]
 pub struct DaoLabel {
@@ -19,14 +23,25 @@ impl DaoLabel {
 
 #[async_trait]
 impl LabelRepo for DaoLabel {
-    async fn get_user_labels(&self, params: UserLabelParams) -> Result<UserLabelResponse> {
+    async fn get_user_labels(&self, _params: UserLabelParams) -> Result<UserLabelResponse> {
         todo!()
     }
 
-    async fn create_user_lable(&self, create: UserLabelCreate) -> Result<UserLabel> {
-        todo!()
+    async fn create_user_lable(&self, create: UserLabelCreate) -> Result<UserLabelCreateResponse> {
+        let model: UserLabelActiveModel = create.into_active_model();
+
+        let model = model.insert(&self.connection).await?;
+
+        Ok(UserLabelCreateResponse { id: model.id })
     }
-    async fn create_lable_meta(&self, create: UserLabelMetaCreate) -> Result<UserLabelMeta> {
-        todo!()
+    async fn create_lable_meta(
+        &self,
+        create: UserLabelMetaCreate,
+    ) -> Result<UserLabelMetaCreateResponse> {
+        let model: LabelMetaActiveModel = create.into_active_model();
+
+        let model = model.insert(&self.connection).await?;
+
+        Ok(UserLabelMetaCreateResponse { id: model.id })
     }
 }

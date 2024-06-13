@@ -3,12 +3,13 @@ mod dao;
 mod label;
 mod user;
 
-use crate::{sea_orm::Database, Error};
+use crate::Error;
 use abi::{
     config::{Config, FromConfig},
     tonic::async_trait,
 };
 use dao::*;
+use entity::sea_orm::Database;
 use label::LabelRepo;
 use migration::{Migrator, MigratorTrait};
 use user::*;

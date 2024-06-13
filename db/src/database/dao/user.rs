@@ -1,5 +1,4 @@
 use crate::helpers::ShaHelper;
-use crate::sea_orm::DatabaseConnection;
 use crate::Kind;
 use crate::{database::UserRepo, Result};
 
@@ -9,7 +8,10 @@ use abi::{
 };
 use entity::sea_orm::TransactionTrait;
 use entity::{
-    sea_orm::{entity::*, ActiveModelTrait, EntityTrait, IntoActiveModel, QueryFilter, Set},
+    sea_orm::{
+        entity::*, ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
+        Set,
+    },
     user::{
         UserAuthActiveModel, UserAuthColumn, UserAuthEntity, UserAuthModel, UserBaseActiveModel,
         UserBaseEntity, UserBaseModel,

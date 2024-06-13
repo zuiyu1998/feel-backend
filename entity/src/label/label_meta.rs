@@ -1,7 +1,7 @@
-use sea_orm::entity::prelude::*;
+use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
-use abi::chrono::NaiveDateTime;
+use abi::{chrono::NaiveDateTime, pb::types::UserLabelMetaCreate};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "label_meta")]
@@ -21,3 +21,15 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+impl IntoActiveModel<ActiveModel> for UserLabelMetaCreate {
+    fn into_active_model(self) -> ActiveModel {
+        let mut model: ActiveModel = Default::default();
+
+        model.name = Set(self.name);
+        model.description = Set(self.description);
+        model.effct = Set(self.effct);
+
+        model
+    }
+}
