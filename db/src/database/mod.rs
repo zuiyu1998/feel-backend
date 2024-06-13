@@ -1,5 +1,6 @@
 mod dao;
 
+mod label;
 mod user;
 
 use crate::{sea_orm::Database, Error};
@@ -8,11 +9,13 @@ use abi::{
     tonic::async_trait,
 };
 use dao::*;
+use label::LabelRepo;
 use migration::{Migrator, MigratorTrait};
 use user::*;
 
 pub struct DbRepo {
     pub user: Box<dyn UserRepo>,
+    pub label: Box<dyn LabelRepo>,
 }
 
 #[async_trait]
@@ -26,6 +29,7 @@ impl FromConfig for DbRepo {
 
         Ok(DbRepo {
             user: Box::new(DaoUser::new(connction.clone())),
+            label: Box::new(DaoLabel::new(connction.clone())),
         })
     }
 }

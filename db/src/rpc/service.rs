@@ -1,11 +1,8 @@
-use std::pin::Pin;
-
 use abi::{
-    futures::Stream,
     pb::types::{
         db_service_server::DbService, GetUserInfoParams, UserBase, UserLabel, UserLabelCreate,
-        UserLabelMeta, UserLabelMetaCreate, UserLabelParams, UserLabelResponse,
-        UserLabelStreamParams, UserLogin, UserRegister, UserUnregister, UserUpdate,
+        UserLabelMeta, UserLabelMetaCreate, UserLabelParams, UserLabelResponse, UserLogin,
+        UserRegister, UserUnregister, UserUpdate,
     },
     tonic::{async_trait, Request, Response, Status},
 };
@@ -18,21 +15,33 @@ impl DbService for DbRpcService {
         &self,
         request: Request<UserLabelParams>,
     ) -> Result<Response<UserLabelResponse>, Status> {
-        todo!()
+        let req = request.into_inner();
+
+        let res = self.db.label.get_user_labels(req).await?;
+
+        Ok(Response::new(res))
     }
 
     async fn create_user_lable(
         &self,
         request: Request<UserLabelCreate>,
     ) -> Result<Response<UserLabel>, Status> {
-        todo!()
+        let req = request.into_inner();
+
+        let res = self.db.label.create_user_lable(req).await?;
+
+        Ok(Response::new(res))
     }
 
     async fn create_lable_meta(
         &self,
         request: Request<UserLabelMetaCreate>,
     ) -> Result<Response<UserLabelMeta>, Status> {
-        todo!()
+        let req = request.into_inner();
+
+        let res = self.db.label.create_lable_meta(req).await?;
+
+        Ok(Response::new(res))
     }
 
     async fn register(&self, request: Request<UserRegister>) -> Result<Response<UserBase>, Status> {
