@@ -1,7 +1,10 @@
-use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
-use abi::{chrono::NaiveDateTime, pb::types::UserLabelCreate};
+use abi::{
+    chrono::NaiveDateTime,
+    pb::types::UserLabelCreate,
+    sea_orm::{self, entity::prelude::*, IntoActiveModel, Set},
+};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "user_label")]

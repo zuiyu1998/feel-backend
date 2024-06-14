@@ -4,11 +4,11 @@ use abi::pb::types::{
     UserLabelCreate, UserLabelCreateResponse, UserLabelMetaCreate, UserLabelMetaCreateResponse,
     UserLabelParams, UserLabelResponse,
 };
-use abi::tonic::async_trait;
-use entity::{
-    label::{LabelMetaActiveModel, UserLabelActiveModel},
-    sea_orm::{ActiveModelTrait, DatabaseConnection, IntoActiveModel},
+use abi::sea_orm::{
+    ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QuerySelect,
 };
+use abi::tonic::async_trait;
+use entity::label::{LabelMetaActiveModel, UserLabelActiveModel, UserLabelEntity};
 
 #[derive(Debug)]
 pub struct DaoLabel {
@@ -24,6 +24,8 @@ impl DaoLabel {
 #[async_trait]
 impl LabelRepo for DaoLabel {
     async fn get_user_labels(&self, _params: UserLabelParams) -> Result<UserLabelResponse> {
+        // let d = UserLabelEntity::find().select_only().from_raw_sql(stmt);
+
         todo!()
     }
 

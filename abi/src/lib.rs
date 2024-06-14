@@ -7,6 +7,7 @@ pub use error::*;
 pub use chrono;
 pub use futures;
 pub use reqwest;
+pub use sea_orm;
 pub use thiserror;
 pub use tokio;
 pub use tonic;

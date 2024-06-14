@@ -46,9 +46,13 @@ message UserLabelMetaCreateResponse  {
 message UserLabel {
     /// id
     int32 id = 1;
-    UserLabelMeta meta = 2;
-    int64 create_at = 3;
-    int64 update_at = 4;
+    string name = 2;
+    /// 描述
+    string description = 3;
+    ///影响力
+    int64 effct = 4;
+    int64 create_at = 5;
+    int64 update_at = 6;
 }
 
 //标签模板

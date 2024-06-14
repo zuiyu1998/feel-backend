@@ -1,5 +1,5 @@
 use abi::pb::types::UserRegister;
-use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
+use abi::sea_orm::{self, entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]

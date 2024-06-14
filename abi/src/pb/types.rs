@@ -67,11 +67,17 @@ pub struct UserLabel {
     /// / id
     #[prost(int32, tag = "1")]
     pub id: i32,
-    #[prost(message, optional, tag = "2")]
-    pub meta: ::core::option::Option<UserLabelMeta>,
-    #[prost(int64, tag = "3")]
-    pub create_at: i64,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    /// / 描述
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    /// /影响力
     #[prost(int64, tag = "4")]
+    pub effct: i64,
+    #[prost(int64, tag = "5")]
+    pub create_at: i64,
+    #[prost(int64, tag = "6")]
     pub update_at: i64,
 }
 /// 标签模板

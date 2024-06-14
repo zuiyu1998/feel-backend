@@ -6,6 +6,10 @@ pub mod rpc;
 
 pub use error::*;
 
+use abi::sea_orm::DatabaseBackend;
+
+pub const DATABASE_BACKEND: DatabaseBackend = DatabaseBackend::Postgres;
+
 use abi::config::Config;
 use rpc::DbRpcService;
 

@@ -13,6 +13,7 @@ dependencies = [
  "prost",
  "prost-types",
  "reqwest",
+ "sea-orm",
  "serde",
  "thiserror",
  "tokio",
@@ -1055,7 +1056,6 @@ name = "entity"
 version = "0.1.0"
 dependencies = [
  "abi",
- "sea-orm",
  "serde",
 ]
 

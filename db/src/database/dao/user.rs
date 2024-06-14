@@ -2,20 +2,17 @@ use crate::helpers::ShaHelper;
 use crate::Kind;
 use crate::{database::UserRepo, Result};
 
+use abi::sea_orm::{
+    entity::*, ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
+    Set, TransactionTrait,
+};
 use abi::{
     pb::types::{GetUserInfoParams, UserBase, UserLogin, UserRegister, UserUnregister, UserUpdate},
     tonic::async_trait,
 };
-use entity::sea_orm::TransactionTrait;
-use entity::{
-    sea_orm::{
-        entity::*, ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
-        Set,
-    },
-    user::{
-        UserAuthActiveModel, UserAuthColumn, UserAuthEntity, UserAuthModel, UserBaseActiveModel,
-        UserBaseEntity, UserBaseModel,
-    },
+use entity::user::{
+    UserAuthActiveModel, UserAuthColumn, UserAuthEntity, UserAuthModel, UserBaseActiveModel,
+    UserBaseEntity, UserBaseModel,
 };
 
 #[derive(Debug)]

@@ -1,9 +1,9 @@
 use abi::{
+    sea_orm::DbErr,
     thiserror::{self, Error},
     tonic::{transport::Error as TonicTransportError, Status},
     Error as AbiError,
 };
-use entity::sea_orm::DbErr;
 use std::io::Error as IoError;
 use utils::Error as UtilsError;
 

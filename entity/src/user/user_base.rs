@@ -1,5 +1,5 @@
 use abi::pb::types::{UserBase, UserRegister, UserUnregister, UserUpdate};
-use sea_orm::{entity::prelude::*, IntoActiveModel, Set};
+use abi::sea_orm::{self, entity::prelude::*, IntoActiveModel, Set};
 use serde::{Deserialize, Serialize};
 
 use abi::chrono::NaiveDateTime;
