@@ -17,20 +17,38 @@ pub struct UserApi;
 
 #[OpenApi(prefix_path = "/user", tag = "super::ApiTags::UserApi")]
 impl UserApi {
-    #[oai(path = "/register", method = "post")]
-    async fn update_avatar_or_name(
+    #[oai(path = "/update_avatar", method = "post")]
+    async fn update_avatar(
         &self,
         Data(state): Data<&AppState>,
-        Json(register): Json<UserRegisterRequest>,
+        Json(req): Json<UserUpdateAvatarRequest>,
     ) -> Result<GenericResponse<Empty>> {
-        register
-            .validate()
+        req.validate()
             .map_err(|e| Error::RequestError(e.to_string()))?;
 
         let mut db_rpc = state.db_rpc.clone();
 
         db_rpc
-            .register(Request::new(register.into_inner()))
+            .update(Request::new(req.into_inner()))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?;
+
+        Ok(GenericResponse::ok(Empty))
+    }
+
+    #[oai(path = "/update_nikename", method = "post")]
+    async fn update_nikename(
+        &self,
+        Data(state): Data<&AppState>,
+        Json(req): Json<UserUpdateNikenameRequest>,
+    ) -> Result<GenericResponse<Empty>> {
+        req.validate()
+            .map_err(|e| Error::RequestError(e.to_string()))?;
+
+        let mut db_rpc = state.db_rpc.clone();
+
+        db_rpc
+            .update(Request::new(req.into_inner()))
             .await
             .map_err(|e| Error::InternalServer(e.to_string()))?;
 

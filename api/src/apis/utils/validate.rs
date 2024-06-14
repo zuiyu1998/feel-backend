@@ -1,7 +1,5 @@
 use abi::pb::types::AuthType;
-use validator::{
-    Validate, ValidateEmail, ValidateLength, ValidateUrl, ValidationError, ValidationErrors,
-};
+use validator::{ValidateEmail, ValidateLength, ValidateUrl, ValidationError, ValidationErrors};
 
 pub fn validate_nikename(target: &str) -> Result<(), ValidationErrors> {
     if !target.validate_length(Some(2), Some(16), None) {

@@ -6,18 +6,49 @@ use validator::{Validate, ValidationErrors};
 use crate::apis::utils::{validate_auth, validate_avatar, validate_nikename};
 
 #[derive(Deserialize, Serialize, Object)]
-pub struct UserUpdateRequest {
+pub struct UserUpdateAvatarRequest {
     pub id: i32,
-    pub nikename: Option<String>,
-    pub avatar: Option<String>,
+    pub avatar: String,
 }
 
-impl UserUpdateRequest {
+impl Validate for UserUpdateAvatarRequest {
+    fn validate(&self) -> Result<(), ValidationErrors> {
+        validate_avatar(&self.avatar)?;
+
+        Ok(())
+    }
+}
+
+impl UserUpdateAvatarRequest {
     pub fn into_inner(self) -> UserUpdate {
         UserUpdate {
             id: self.id,
-            nikename: self.nikename,
-            avatar: self.avatar,
+            nikename: None,
+            avatar: Some(self.avatar),
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Object)]
+pub struct UserUpdateNikenameRequest {
+    pub id: i32,
+    pub nikename: String,
+}
+
+impl Validate for UserUpdateNikenameRequest {
+    fn validate(&self) -> Result<(), ValidationErrors> {
+        validate_nikename(&self.nikename)?;
+
+        Ok(())
+    }
+}
+
+impl UserUpdateNikenameRequest {
+    pub fn into_inner(self) -> UserUpdate {
+        UserUpdate {
+            id: self.id,
+            nikename: Some(self.nikename),
+            avatar: None,
         }
     }
 }
