@@ -1,7 +1,24 @@
-use abi::pb::types::{UserLabelCreate, UserLabelMetaCreate};
+use abi::pb::types::{UserLabelCreate, UserLabelMetaCreate, UserLabelParams};
 use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
+
+#[derive(Deserialize, Serialize, Object, Validate)]
+pub struct UserLabelParamsRequest {
+    pub page: i32,
+    pub page_size: i32,
+    pub id: i32,
+}
+
+impl UserLabelParamsRequest {
+    pub fn into_inner(self) -> UserLabelParams {
+        UserLabelParams {
+            page: self.page,
+            page_size: self.page_size,
+            id: self.id,
+        }
+    }
+}
 
 #[derive(Deserialize, Serialize, Object, Validate)]
 pub struct UserLabelCreateRequest {

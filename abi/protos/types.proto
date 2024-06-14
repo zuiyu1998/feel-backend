@@ -13,7 +13,8 @@ message UserLabelResponse {
     int32 count = 1;
     int32 page_size = 2;
     int32 page = 3;
-    repeated UserLabel data = 4;
+    bool has_next = 4;
+    repeated UserLabel data = 5;
 }
 
 ///用户创建标签的参数

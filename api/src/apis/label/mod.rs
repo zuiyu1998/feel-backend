@@ -14,6 +14,25 @@ pub struct LabelApi;
 
 #[OpenApi(prefix_path = "/label", tag = "super::ApiTags::LabelApi")]
 impl LabelApi {
+    #[oai(path = "/get_user_labels", method = "post")]
+    async fn get_user_labels(
+        &self,
+        Data(state): Data<&AppState>,
+        Json(req): Json<UserLabelParamsRequest>,
+    ) -> Result<GenericResponse<Empty>> {
+        req.validate()
+            .map_err(|e| Error::RequestError(e.to_string()))?;
+
+        let mut db_rpc = state.db_rpc.clone();
+
+        db_rpc
+            .get_user_labels(Request::new(req.into_inner()))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?;
+
+        Ok(GenericResponse::ok(Empty))
+    }
+
     #[oai(path = "/create_lable_meta", method = "post")]
     async fn create_lable_meta(
         &self,

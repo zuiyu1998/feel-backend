@@ -20,7 +20,9 @@ pub struct UserLabelResponse {
     pub page_size: i32,
     #[prost(int32, tag = "3")]
     pub page: i32,
-    #[prost(message, repeated, tag = "4")]
+    #[prost(bool, tag = "4")]
+    pub has_next: bool,
+    #[prost(message, repeated, tag = "5")]
     pub data: ::prost::alloc::vec::Vec<UserLabel>,
 }
 /// /用户创建标签的参数
