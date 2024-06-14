@@ -18,6 +18,26 @@ pub struct UserApi;
 #[OpenApi(prefix_path = "/user", tag = "super::ApiTags::UserApi")]
 impl UserApi {
     #[oai(path = "/register", method = "post")]
+    async fn update_avatar_or_name(
+        &self,
+        Data(state): Data<&AppState>,
+        Json(register): Json<UserRegisterRequest>,
+    ) -> Result<GenericResponse<Empty>> {
+        register
+            .validate()
+            .map_err(|e| Error::RequestError(e.to_string()))?;
+
+        let mut db_rpc = state.db_rpc.clone();
+
+        db_rpc
+            .register(Request::new(register.into_inner()))
+            .await
+            .map_err(|e| Error::InternalServer(e.to_string()))?;
+
+        Ok(GenericResponse::ok(Empty))
+    }
+
+    #[oai(path = "/register", method = "post")]
     async fn register(
         &self,
         Data(state): Data<&AppState>,

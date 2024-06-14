@@ -103,7 +103,11 @@ impl UserRepo for DaoUser {
 
         Ok(UserBase::from(user_model))
     }
-    async fn update(&self, _update: UserUpdate) -> Result<UserBase> {
-        todo!()
+    async fn update(&self, update: UserUpdate) -> Result<UserBase> {
+        let user_model: UserBaseActiveModel = update.into_active_model();
+
+        let user_model = user_model.update(&self.connection).await?;
+
+        Ok(UserBase::from(user_model))
     }
 }

@@ -1,6 +1,8 @@
 mod auth;
+mod validate;
 
 pub use auth::*;
+pub use validate::*;
 
 use poem_openapi::{
     error::ParseRequestPayloadError,

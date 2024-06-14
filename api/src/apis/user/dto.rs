@@ -1,9 +1,26 @@
-use abi::pb::types::{AuthType, UserBase, UserLogin, UserRegister};
+use abi::pb::types::{AuthType, UserBase, UserLogin, UserRegister, UserUpdate};
 use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
-use validator::{
-    Validate, ValidateEmail, ValidateLength, ValidateUrl, ValidationError, ValidationErrors,
-};
+use validator::{Validate, ValidationErrors};
+
+use crate::apis::utils::{validate_auth, validate_avatar, validate_nikename};
+
+#[derive(Deserialize, Serialize, Object)]
+pub struct UserUpdateRequest {
+    pub id: i32,
+    pub nikename: Option<String>,
+    pub avatar: Option<String>,
+}
+
+impl UserUpdateRequest {
+    pub fn into_inner(self) -> UserUpdate {
+        UserUpdate {
+            id: self.id,
+            nikename: self.nikename,
+            avatar: self.avatar,
+        }
+    }
+}
 
 #[derive(Deserialize, Serialize, Object)]
 pub struct UserBaseResponse {
@@ -47,20 +64,7 @@ pub struct UserLoginRequest {
 
 impl Validate for UserLoginRequest {
     fn validate(&self) -> Result<(), ValidationErrors> {
-        if let Some(auth) = AuthType::from_str_name(&self.auth_type) {
-            match auth {
-                AuthType::Email => {
-                    if !self.auth_name.validate_email() {
-                        return Err(get_validation_errors(
-                            "auth_name",
-                            "auth_name is invaild email",
-                        ));
-                    }
-                }
-            }
-        } else {
-            return Err(get_validation_errors("auth_type", "auth_type is invaild"));
-        }
+        validate_auth(&self.auth_type, &self.auth_name)?;
 
         Ok(())
     }
@@ -95,31 +99,9 @@ pub struct UserRegisterRequest {
 
 impl Validate for UserRegisterRequest {
     fn validate(&self) -> Result<(), ValidationErrors> {
-        if !self.nikename.validate_length(Some(2), Some(16), None) {
-            return Err(get_validation_errors(
-                "nikename",
-                "nikename length too min or too max",
-            ));
-        }
-
-        if !self.avatar.validate_url() {
-            return Err(get_validation_errors("avatar", "avatar is invaild"));
-        }
-
-        if let Some(auth) = AuthType::from_str_name(&self.auth_type) {
-            match auth {
-                AuthType::Email => {
-                    if !self.auth_name.validate_email() {
-                        return Err(get_validation_errors(
-                            "auth_name",
-                            "auth_name is invaild email",
-                        ));
-                    }
-                }
-            }
-        } else {
-            return Err(get_validation_errors("auth_type", "auth_type is invaild"));
-        }
+        validate_nikename(&self.nikename)?;
+        validate_avatar(&self.avatar)?;
+        validate_auth(&self.auth_type, &self.auth_name)?;
 
         Ok(())
     }
@@ -145,12 +127,4 @@ impl UserRegisterRequest {
             auth_code,
         }
     }
-}
-
-fn get_validation_errors(field: &'static str, code: &'static str) -> ValidationErrors {
-    let mut errors = ValidationErrors::new();
-
-    errors.add(&field, ValidationError::new(code));
-
-    errors
 }
