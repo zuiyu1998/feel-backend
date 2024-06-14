@@ -61,6 +61,7 @@ pub struct UserLabelMetaCreateResponse {
     pub id: i32,
 }
 /// /标签
+#[derive(sea_orm::FromQueryResult)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserLabel {

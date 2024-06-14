@@ -1,11 +1,11 @@
-use crate::{database::LabelRepo, Result};
+use crate::{database::LabelRepo, Result, DATABASE_BACKEND};
 
 use abi::pb::types::{
-    UserLabelCreate, UserLabelCreateResponse, UserLabelMetaCreate, UserLabelMetaCreateResponse,
-    UserLabelParams, UserLabelResponse,
+    UserLabel, UserLabelCreate, UserLabelCreateResponse, UserLabelMetaCreate,
+    UserLabelMetaCreateResponse, UserLabelParams, UserLabelResponse,
 };
 use abi::sea_orm::{
-    ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QuerySelect,
+    ActiveModelTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QuerySelect, Statement,
 };
 use abi::tonic::async_trait;
 use entity::label::{LabelMetaActiveModel, UserLabelActiveModel, UserLabelEntity};
@@ -24,9 +24,7 @@ impl DaoLabel {
 #[async_trait]
 impl LabelRepo for DaoLabel {
     async fn get_user_labels(&self, _params: UserLabelParams) -> Result<UserLabelResponse> {
-        // let d = UserLabelEntity::find().select_only().from_raw_sql(stmt);
-
-        todo!()
+        todo!();
     }
 
     async fn create_user_lable(&self, create: UserLabelCreate) -> Result<UserLabelCreateResponse> {
