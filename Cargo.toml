@@ -1,5 +1,5 @@
 [workspace]
-members = ["./crates/abi", ".", "crates/db", "crates/entity", "crates/migration"]
+members = ["./crates/abi", ".", "crates/db", "crates/entity", "crates/migration", "api"]
 resolver = "2"
 
 [workspace.dependencies]
@@ -8,3 +8,4 @@ thiserror = { version = "1.0" }
 
 # 数据库
 sea-orm = { version = "1.1" }
+tokio = { version = "1.43" }

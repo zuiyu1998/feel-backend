@@ -1,7 +1,3 @@
-use async_trait::async_trait;
-
-use crate::Result;
-
 pub struct User {
     id: i64,
     uid: String,
@@ -32,17 +28,4 @@ pub struct UserRegisterForm {
 pub struct UserUnregisterForm {
     uid: String,
     token: String,
-}
-
-///用户系统
-#[async_trait]
-pub trait UserRepo {
-    //注册
-    async fn register(&self, form: &UserRegisterForm) -> Result<()>;
-
-    //注销
-    async fn unregister(&self, form: &UserUnregisterForm) -> Result<()>;
-
-    ///登录
-    async fn login(&self, form: &UserLoginForm) -> Result<()>;
 }

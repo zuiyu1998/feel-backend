@@ -7,3 +7,6 @@ edition = "2021"
 async-trait = { workspace = true }
 thiserror = { workspace = true }
 sea-orm = { workspace = true, features = ["runtime-tokio-native-tls", "sqlx-postgres"] }
+
+tracing = { version = "0.1"}
+tracing-subscriber = { version = "0.3" }
