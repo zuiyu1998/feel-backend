@@ -14,7 +14,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(big_integer(UserBaseColumn::Id).auto_increment())
                     .col(string(UserBaseColumn::Uid))
-                    .col(string(UserBaseColumn::Nikename))
+                    .col(string(UserBaseColumn::Nikename).unique_key())
                     .col(big_integer(UserBaseColumn::CreateAt))
                     .col(big_integer(UserBaseColumn::UpdateAt))
                     .to_owned(),
