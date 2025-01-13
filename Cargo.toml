@@ -1,6 +1,6 @@
-[package]
-name = "feel-backend"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+members = ["./crates/abi", "."]
 
-[dependencies]
+[workspace.dependencies]
+async-trait = { version = "0.1" }
+thiserror = { version = "1.0" }
