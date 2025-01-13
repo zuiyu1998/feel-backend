@@ -1,6 +1,10 @@
 [workspace]
-members = ["./crates/abi", "."]
+members = ["./crates/abi", ".", "crates/db", "crates/entity", "crates/migration"]
+resolver = "2"
 
 [workspace.dependencies]
 async-trait = { version = "0.1" }
 thiserror = { version = "1.0" }
+
+# 数据库
+sea-orm = { version = "1.1" }
