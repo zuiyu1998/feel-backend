@@ -1,4 +1,7 @@
-use abi::sea_orm::{self, entity::prelude::*};
+use abi::{
+    sea_orm::{self, entity::prelude::*, IntoActiveModel, Set},
+    user::UserAuthRegisterForm,
+};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "user-auth")]
@@ -15,3 +18,16 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+impl IntoActiveModel<ActiveModel> for UserAuthRegisterForm {
+    fn into_active_model(self) -> ActiveModel {
+        let mut model: ActiveModel = <ActiveModel as ActiveModelTrait>::default();
+
+        model.user_id = Set(self.user_id);
+        model.login_type = Set(self.login_type.as_str().to_string());
+        model.auth_token = Set(self.auth_token);
+        model.auth_name = Set(self.auth_name);
+
+        model
+    }
+}

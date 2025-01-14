@@ -17,6 +17,8 @@ impl MigrationTrait for Migration {
                     .col(string(UserBaseColumn::Nikename).unique_key())
                     .col(big_integer(UserBaseColumn::CreateAt))
                     .col(big_integer(UserBaseColumn::UpdateAt))
+                    .col(boolean(UserBaseColumn::IsDelete).default(false))
+                    .col(boolean(UserBaseColumn::IsEnable).default(true))
                     .to_owned(),
             )
             .await

@@ -7,9 +7,8 @@ pub trait UserRepo: 'static + Send + Sync {
     async fn register(&self, form: &UserRegisterForm) -> Result<()>;
 
     //注销
-    async fn unregister(&self, form: &UserUnregisterForm) -> Result<()>;
+    async fn unregister(&self, user_id: i64) -> Result<()>;
 
     ///登录
-    async fn login(&self, form: &UserLoginForm) -> Result<()>;
-
+    async fn login(&self, form: &UserLoginForm) -> Result<User>;
 }
