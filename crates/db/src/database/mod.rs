@@ -15,6 +15,12 @@ pub struct UserDb {
     conn: DatabaseConnection,
 }
 
+impl UserDb {
+    pub fn new(conn: DatabaseConnection) -> UserDb {
+        UserDb { conn }
+    }
+}
+
 #[async_trait]
 impl UserRepo for UserDb {
     ///注册

@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 pub struct User {
     pub id: i64,
     pub uid: String,
@@ -7,7 +9,7 @@ pub struct User {
 }
 
 ///登录类型
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,Serialize, Deserialize)]
 pub enum LoginType {
     ///手机
     Phone,

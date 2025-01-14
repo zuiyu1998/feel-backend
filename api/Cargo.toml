@@ -8,3 +8,6 @@ axum = { version = "0.8" }
 tokio = { workspace = true, features = ["full"] }
 
 abi = { path = "../crates/abi" }
+service = { path = "../crates/service" }
+db = { path = "../crates/db" }
+thiserror = { workspace = true }

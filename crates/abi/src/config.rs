@@ -4,6 +4,34 @@ use tracing::Level;
 pub struct Config {
     pub api: ApiConfig,
     pub log: LogConfig,
+    pub sha: ShaConfig,
+    pub db: DbConfig,
+}
+
+#[derive(Debug, Clone)]
+pub struct DbConfig {
+    pub database_url: String,
+}
+
+impl Default for DbConfig {
+    fn default() -> Self {
+        DbConfig {
+            database_url: "postgresql://postgres:bj123456@localhost/feel".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ShaConfig {
+    pub security: String,
+}
+
+impl Default for ShaConfig {
+    fn default() -> Self {
+        ShaConfig {
+            security: "feel-sha2".to_string(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default)]

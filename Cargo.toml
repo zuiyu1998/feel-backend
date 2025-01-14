@@ -9,3 +9,4 @@ thiserror = { version = "1.0" }
 # 数据库
 sea-orm = { version = "1.1" }
 tokio = { version = "1.43" }
+serde = { version = "1.0" }

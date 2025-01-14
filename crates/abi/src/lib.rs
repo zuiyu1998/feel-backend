@@ -6,5 +6,6 @@ pub mod log;
 
 pub use sea_orm;
 pub use async_trait;
+pub use tracing;
 
 pub use error::*;

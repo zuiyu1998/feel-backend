@@ -8,3 +8,4 @@ abi = { path = "../abi" }
 db = { path = "../db" }
 
 sha2 = { version = "0.10" }
+serde = { workspace = true, features = ["derive"] }

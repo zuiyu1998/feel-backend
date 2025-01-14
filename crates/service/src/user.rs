@@ -2,9 +2,11 @@ use std::sync::Arc;
 
 use abi::{async_trait::async_trait, user::*, Result};
 use db::user::UserRepo;
-
+use serde::{Deserialize, Serialize};
 use crate::encryptor::Encryptor;
 
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UserRegisterReq {
     pub login_type: LoginType,
     pub auth_token: String,
@@ -37,6 +39,15 @@ pub trait UserService: 'static + Send + Sync {
 pub struct UserServiceImpl {
     user_repo: Arc<dyn UserRepo>,
     encryptor: Arc<dyn Encryptor>,
+}
+
+impl UserServiceImpl {
+    pub fn new(user_repo: Arc<dyn UserRepo>, encryptor: Arc<dyn Encryptor>) -> Self {
+        Self {
+            user_repo,
+            encryptor,
+        }
+    }
 }
 
 #[async_trait]

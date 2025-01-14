@@ -8,6 +8,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "sea-orm",
+ "serde",
  "thiserror 1.0.69",
  "tracing",
  "tracing-subscriber",
@@ -130,6 +131,9 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "axum",
+ "db",
+ "service",
+ "thiserror 1.0.69",
  "tokio",
 ]
 
@@ -719,6 +723,7 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "entity",
+ "migration",
 ]
 
 [[package]]
@@ -2405,6 +2410,7 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "db",
+ "serde",
  "sha2",
 ]
 
