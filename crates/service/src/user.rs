@@ -1,10 +1,9 @@
 use std::sync::Arc;
 
+use crate::{encryptor::Encryptor, jwt_helper::JwtHelper};
 use abi::{async_trait::async_trait, user::*, Result};
 use db::user::UserRepo;
 use serde::{Deserialize, Serialize};
-use crate::encryptor::Encryptor;
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserRegisterReq {
@@ -31,21 +30,49 @@ impl UserRegisterReq {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserLoginReq {
+    pub login_type: LoginType,
+    pub auth_token: String,
+    pub auth_name: String,
+}
+
+impl UserLoginReq {
+    pub fn to_form(&self, encryptor: &Arc<dyn Encryptor>) -> UserLoginForm {
+        let auth_token = encryptor.encode(&self.auth_token.as_bytes());
+
+
+        UserLoginForm {
+            login_type: self.login_type.clone(),
+            auth_token: auth_token,
+            auth_name: self.auth_name.clone(),
+        }
+    }
+}
+
 #[async_trait]
 pub trait UserService: 'static + Send + Sync {
     async fn register(&self, req: &UserRegisterReq) -> Result<()>;
+    async fn unregister(&self, user_id: i64) -> Result<()>;
+    async fn login(&self, req: UserLoginReq) -> Result<String>;
 }
 
 pub struct UserServiceImpl {
     user_repo: Arc<dyn UserRepo>,
     encryptor: Arc<dyn Encryptor>,
+    jwt: Arc<JwtHelper>,
 }
 
 impl UserServiceImpl {
-    pub fn new(user_repo: Arc<dyn UserRepo>, encryptor: Arc<dyn Encryptor>) -> Self {
+    pub fn new(
+        user_repo: Arc<dyn UserRepo>,
+        encryptor: Arc<dyn Encryptor>,
+        jwt: Arc<JwtHelper>,
+    ) -> Self {
         Self {
             user_repo,
             encryptor,
+            jwt
         }
     }
 }
@@ -58,5 +85,21 @@ impl UserService for UserServiceImpl {
         self.user_repo.register(&form).await?;
 
         Ok(())
+    }
+
+    async fn unregister(&self, user_id: i64) -> Result<()> {
+        self.user_repo.unregister(user_id).await?;
+
+        Ok(())
+    }
+
+    async fn login(&self, req: UserLoginReq) -> Result<String> {
+        let form = req.to_form(&self.encryptor);
+
+        let user = self.user_repo.login(&form).await?;
+
+        let token = self.jwt.encode(user.id);
+
+        Ok(token)
     }
 }

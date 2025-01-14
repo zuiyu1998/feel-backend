@@ -6,6 +6,7 @@ pub struct Config {
     pub log: LogConfig,
     pub sha: ShaConfig,
     pub db: DbConfig,
+    pub jwt: JWTConfig,
 }
 
 #[derive(Debug, Clone)]
@@ -17,6 +18,21 @@ impl Default for DbConfig {
     fn default() -> Self {
         DbConfig {
             database_url: "postgresql://postgres:bj123456@localhost/feel".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct JWTConfig {
+    pub security: String,
+    pub issuer: String,
+}
+
+impl Default for JWTConfig {
+    fn default() -> Self {
+        JWTConfig {
+            security: "feel-jwt".to_string(),
+            issuer: "feel.com".to_string(),
         }
     }
 }

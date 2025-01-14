@@ -9,3 +9,5 @@ db = { path = "../db" }
 
 sha2 = { version = "0.10" }
 serde = { workspace = true, features = ["derive"] }
+jwt = { version = "0.16" }
+hmac = { version = "0.12" }
