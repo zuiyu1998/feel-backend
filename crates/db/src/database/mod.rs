@@ -5,7 +5,7 @@ use abi::{
         QueryFilter, Set,
     },
     user::*,
-    Result,
+    ErrorKind, Result,
 };
 use entity::user::*;
 
@@ -47,10 +47,13 @@ impl UserRepo for UserDb {
     async fn login(&self, form: &UserLoginForm) -> Result<User> {
         let auth_sql = UserAuthEntity::find()
             .filter(UserAuthColumn::LoginType.eq(form.login_type.as_str()))
-            .filter(UserAuthColumn::AuthToken.eq(&form.auth_token))
             .filter(UserAuthColumn::AuthName.eq(&form.auth_name));
 
         let auth_model = auth_sql.one(&self.conn).await?.unwrap();
+
+        if form.auth_token != auth_model.auth_token {
+            return Err(ErrorKind::PasswordNotMatch.into());
+        }
 
         let user_model = UserBaseEntity::find_by_id(auth_model.user_id)
             .one(&self.conn)

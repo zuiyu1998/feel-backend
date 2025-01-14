@@ -23,14 +23,14 @@ impl LoginType {
 
 pub struct UserLoginForm {
     pub login_type: LoginType,
-    pub auth_token: String,
+    pub auth_token: Vec<u8>,
     pub auth_name: String,
 }
 
 #[derive(Debug, Clone)]
 pub struct UserRegisterForm {
     pub login_type: LoginType,
-    pub auth_token: String,
+    pub auth_token: Vec<u8>,
     pub auth_name: String,
     pub nikename: String,
     pub uid: String,
@@ -52,7 +52,7 @@ impl UserRegisterForm {
 #[derive(Debug, Clone)]
 pub struct UserAuthRegisterForm {
     pub login_type: LoginType,
-    pub auth_token: String,
+    pub auth_token: Vec<u8>,
     pub auth_name: String,
     pub user_id: i64,
 }

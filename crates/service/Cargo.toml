@@ -1,0 +1,10 @@
+[package]
+name = "service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+abi = { path = "../abi" }
+db = { path = "../db" }
+
+sha2 = { version = "0.10" }

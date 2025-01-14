@@ -14,7 +14,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(big_integer(UserAuthColumn::UserId))
                     .col(string(UserAuthColumn::LoginType))
-                    .col(string(UserAuthColumn::AuthToken))
+                    .col(binary(UserAuthColumn::AuthToken))
                     .col(string(UserAuthColumn::AuthName))
                     .primary_key(
                         Index::create()

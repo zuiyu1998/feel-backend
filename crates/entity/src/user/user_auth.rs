@@ -10,7 +10,7 @@ pub struct Model {
     pub user_id: i64,
     #[sea_orm(primary_key)]
     pub login_type: String,
-    pub auth_token: String,
+    pub auth_token: Vec<u8>,
     pub auth_name: String,
 }
 
