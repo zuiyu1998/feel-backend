@@ -1,6 +1,8 @@
 mod routes;
 mod user;
 
+mod utils;
+
 mod error;
 
 use abi::{config::Config, log, tracing, Result};

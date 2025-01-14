@@ -1,4 +1,4 @@
-use crate::{error::Result, routes::AppState};
+use crate::{error::Result, routes::AppState, utils::AppJson};
 use axum::{extract::State, routing::post, Json, Router};
 use service::user::UserRegisterReq;
 
@@ -9,8 +9,8 @@ pub fn routes() -> Router<AppState> {
 async fn register(
     State(state): State<AppState>,
     Json(req): Json<UserRegisterReq>,
-) -> Result<Json<()>> {
+) -> Result<AppJson<()>> {
     state.user_service.register(&req).await?;
 
-    Ok(Json(()))
+    Ok(AppJson::ok(()))
 }

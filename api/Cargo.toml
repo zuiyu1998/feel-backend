@@ -11,3 +11,5 @@ abi = { path = "../crates/abi" }
 service = { path = "../crates/service" }
 db = { path = "../crates/db" }
 thiserror = { workspace = true }
+serde = { workspace = true }
+serde_repr = { workspace = true }
