@@ -6,6 +6,8 @@ use thiserror::Error;
 pub enum ErrorKind {
     #[error("PasswordNotMatch")]
     PasswordNotMatch,
+    #[error("TokenInvaild")]
+    TokenInvaild,
 }
 
 #[derive(Debug, Error)]

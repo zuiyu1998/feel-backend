@@ -131,6 +131,7 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "axum",
+ "axum-auth",
  "db",
  "serde",
  "serde_repr",
@@ -356,6 +357,17 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "axum-auth"
+version = "0.8.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "108717f4e1c91368c66a1a2f6900019282acb1ac5f17407431aae3e1745c41a5"
+dependencies = [
+ "axum-core",
+ "base64 0.22.1",
+ "http",
 ]
 
 [[package]]

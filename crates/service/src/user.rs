@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::{encryptor::Encryptor, jwt_helper::JwtHelper};
-use abi::{async_trait::async_trait, user::*, Result};
+use abi::{async_trait::async_trait, user::*, ErrorKind, Result};
 use db::user::UserRepo;
 use serde::{Deserialize, Serialize};
 
@@ -41,7 +41,6 @@ impl UserLoginReq {
     pub fn to_form(&self, encryptor: &Arc<dyn Encryptor>) -> UserLoginForm {
         let auth_token = encryptor.encode(&self.auth_token.as_bytes());
 
-
         UserLoginForm {
             login_type: self.login_type.clone(),
             auth_token: auth_token,
@@ -53,7 +52,7 @@ impl UserLoginReq {
 #[async_trait]
 pub trait UserService: 'static + Send + Sync {
     async fn register(&self, req: &UserRegisterReq) -> Result<()>;
-    async fn unregister(&self, user_id: i64) -> Result<()>;
+    async fn unregister(&self, token: &str) -> Result<()>;
     async fn login(&self, req: UserLoginReq) -> Result<String>;
 }
 
@@ -72,7 +71,7 @@ impl UserServiceImpl {
         Self {
             user_repo,
             encryptor,
-            jwt
+            jwt,
         }
     }
 }
@@ -87,10 +86,13 @@ impl UserService for UserServiceImpl {
         Ok(())
     }
 
-    async fn unregister(&self, user_id: i64) -> Result<()> {
-        self.user_repo.unregister(user_id).await?;
-
-        Ok(())
+    async fn unregister(&self, token: &str) -> Result<()> {
+        if let Some(user_id) = self.jwt.decode(token) {
+            self.user_repo.unregister(user_id).await?;
+            Ok(())
+        } else {
+            Err(ErrorKind::TokenInvaild.into())
+        }
     }
 
     async fn login(&self, req: UserLoginReq) -> Result<String> {
