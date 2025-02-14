@@ -1,2 +1,1 @@
-pub trait Cache {
-}
+pub trait AuthCache {}

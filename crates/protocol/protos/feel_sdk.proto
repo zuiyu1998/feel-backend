@@ -1,0 +1,32 @@
+syntax = "proto3";
+package feel_sdk;
+
+// 标签
+message EffectLabel {
+  int32 id = 1;
+  int32 effect = 2;
+  string name = 3;
+  string description = 4;
+}
+
+message CreateLabelReq {
+  int32 effect = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CreateLabelResp { EffectLabel effect_label = 1; }
+
+message GetUserEffctReq { string uid = 1; }
+
+message GetUserEffctResp { int64 effect = 1; }
+
+message GetFeelReq { string uid = 1; }
+
+message GetFeelResp { repeated EffectLabel effect_label = 1; }
+
+service feel {
+  rpc create_label(CreateLabelReq) returns (CreateLabelResp);
+  rpc get_user_effct(GetUserEffctReq) returns (GetUserEffctResp);
+  rpc get_feel(GetFeelReq) returns (GetFeelResp);
+}
