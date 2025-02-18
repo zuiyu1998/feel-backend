@@ -2,6 +2,8 @@ use sea_orm::DbErr;
 use std::io::Error as IoError;
 use thiserror::Error;
 
+use protocol::tonic::Status;
+
 #[derive(Debug, Error)]
 pub enum ErrorKind {
     #[error("PasswordNotMatch")]
@@ -21,3 +23,9 @@ pub enum Error {
 }
 
 pub type Result<T, E = Error> = core::result::Result<T, E>;
+
+impl From<Error> for Status {
+    fn from(value: Error) -> Self {
+        Status::internal(value.to_string())
+    }
+}

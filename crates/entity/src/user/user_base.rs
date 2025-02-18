@@ -1,7 +1,4 @@
-use abi::{
-    sea_orm::{self, entity::prelude::*, IntoActiveModel, Set},
-    user::{User, UserRegisterForm},
-};
+use abi::sea_orm::{self, entity::prelude::*};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "user-base")]
@@ -20,28 +17,3 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
-
-impl IntoActiveModel<ActiveModel> for UserRegisterForm {
-    fn into_active_model(self) -> ActiveModel {
-        let mut model: ActiveModel = <ActiveModel as ActiveModelTrait>::default();
-
-        model.nikename = Set(self.nikename);
-        model.uid = Set(self.uid);
-        model.create_at = Set(self.create_at);
-        model.update_at = Set(self.update_at);
-
-        model
-    }
-}
-
-impl From<Model> for User {
-    fn from(value: Model) -> Self {
-        User {
-            id: value.id,
-            nikename: value.nikename,
-            uid: value.uid,
-            create_at: value.create_at,
-            update_at: value.update_at,
-        }
-    }
-}

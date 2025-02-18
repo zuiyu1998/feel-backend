@@ -1,32 +1,34 @@
 use std::sync::Arc;
 
-use abi::{config::Config, Result};
-use axum::Router;
-use db::Db;
-use service::{
-    encryptor::{sha2_impl::Sha2Encryptor, Encryptor}, jwt_helper::JwtHelper, user::{UserService, UserServiceImpl}
+use abi::{
+    config::Config,
+    sea_orm::{Database, DatabaseConnection},
+    Result,
 };
+use axum::Router;
+use migration::{Migrator, MigratorTrait};
+use service::user::UserServiceImpl;
 
 use crate::user;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub user_service: Arc<dyn UserService>,
+    pub user_service: Arc<UserServiceImpl>,
 }
 
 impl AppState {
-    pub fn new(db: Db, encryptor: Arc<dyn Encryptor>, jwt: Arc<JwtHelper>) -> Self {
+    pub fn new(conn: DatabaseConnection) -> Self {
         AppState {
-            user_service: Arc::new(UserServiceImpl::new(db.user.clone(), encryptor, jwt)),
+            user_service: Arc::new(UserServiceImpl::new(&conn)),
         }
     }
 
     pub async fn from_config(config: &Config) -> Result<Self> {
-        let db: Db = Db::from_config(&config.db).await?;
-        let encryptor = Sha2Encryptor::from_config(&config.sha);
-        let jwt = JwtHelper::from_config(&config.jwt);
+        let conn = Database::connect(&config.db.database_url).await?;
 
-        Ok(AppState::new(db, Arc::new(encryptor), Arc::new(jwt)))
+        Migrator::up(&conn, None).await?;
+
+        Ok(AppState::new(conn))
     }
 }
 

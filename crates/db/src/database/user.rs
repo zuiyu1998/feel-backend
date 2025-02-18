@@ -1,15 +1,11 @@
 use abi::{
-    async_trait::async_trait,
-    sea_orm::{
-        ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, IntoActiveModel, QueryFilter,
-        Set,
-    },
-    user::*,
-    ErrorKind, Result,
+    sea_orm::{ActiveModelTrait, ConnectionTrait, IntoActiveModel, Set},
+    tonic::async_trait,
+    Result,
 };
 use entity::user::*;
 
-use crate::user::UserRepo;
+use crate::user::{dto::*, UserRepo};
 
 pub struct UserDataBase<C> {
     conn: C,
@@ -25,16 +21,16 @@ impl<C: ConnectionTrait> UserDataBase<C> {
 impl<C: ConnectionTrait + Send + 'static> UserRepo for UserDataBase<C> {
     ///注册
     ///todo 错误处理
-    async fn register(&self, form: &UserRegisterForm) -> Result<()> {
+    async fn register(&self, form: &RegisterUserForm) -> Result<User> {
         let user_active: UserBaseActiveModel = form.clone().into_active_model();
 
         let user_model = user_active.insert(&self.conn).await?;
 
-        let auth_active = form.get_auth(user_model.id).into_active_model();
+        let auth_active = form.get_user_auth_active_model(user_model.id);
 
         auth_active.insert(&self.conn).await?;
 
-        Ok(())
+        Ok(User::new(user_model))
     }
 
     //注销
@@ -48,24 +44,11 @@ impl<C: ConnectionTrait + Send + 'static> UserRepo for UserDataBase<C> {
         Ok(())
     }
 
-    ///登录
-    ///todo 错误处理
-    async fn login(&self, form: &UserLoginForm) -> Result<User> {
-        let auth_sql = UserAuthEntity::find()
-            .filter(UserAuthColumn::LoginType.eq(form.login_type.as_str()))
-            .filter(UserAuthColumn::AuthName.eq(&form.auth_name));
+    async fn get_user_base(&self, _uid: &str) -> Result<User> {
+        todo!()
+    }
 
-        let auth_model = auth_sql.one(&self.conn).await?.unwrap();
-
-        if form.auth_token != auth_model.auth_token {
-            return Err(ErrorKind::PasswordNotMatch.into());
-        }
-
-        let user_model = UserBaseEntity::find_by_id(auth_model.user_id)
-            .one(&self.conn)
-            .await?
-            .unwrap();
-
-        Ok(user_model.into())
+    async fn get_user_auth(&self, _uid: &str, _auth_type: UserAuthType) -> Result<UserAuth> {
+        todo!()
     }
 }

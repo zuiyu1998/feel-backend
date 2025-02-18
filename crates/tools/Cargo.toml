@@ -1,0 +1,10 @@
+[package]
+name = "tools"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = { version = "0.4" }
+hmac = { version = "0.12" }
+sha2 = { version = "0.10" }
+rand = { version = "0.9" }

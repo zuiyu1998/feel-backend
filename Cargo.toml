@@ -8,12 +8,11 @@ members = [
     "api",
     "crates/service",
     "crates/cache",
-    "crates/protocol",
+    "crates/protocol", "crates/tools",
 ]
 resolver = "2"
 
 [workspace.dependencies]
-async-trait = { version = "0.1" }
 thiserror = { version = "1.0" }
 
 # 数据库
@@ -31,3 +30,5 @@ tonic-build = { version = "0.12" }
 # proto
 prost = "0.13"
 prost-types = "0.13"
+
+axum = { version = "0.7" }

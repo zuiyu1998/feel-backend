@@ -1,25 +1,25 @@
 use crate::{error::Result, routes::AppState, utils::AppJson};
-use axum::{extract::State, routing::post, Json, Router};
-use axum_auth::AuthBearer;
-use service::user::{UserLoginReq, UserRegisterReq};
+use abi::protocol::pb::feel_sdk::{RegisterUserReq, UserLoginReq};
+use axum::{extract::State, routing::{get, post}, Json, Router};
 
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/register", post(register))
-        .route("/login", post(login))
-        .route("/unregister", post(unregister))
+        // .route("/login", post(login))
+        // .route("/unregister", post(unregister))
 }
 
-async fn unregister(State(state): State<AppState>, AuthBearer(token): AuthBearer) -> Result<AppJson<()>> {
-    state.user_service.unregister(&token).await?;
+// async fn unregister(State(state): State<AppState>, AuthBearer(token): AuthBearer) -> Result<AppJson<()>> {
+//     todo!()
+//     // state.user_service.unregister_user(&token).await?;
 
-    Ok(AppJson::ok(()))
-}
+//     // Ok(AppJson::ok(()))
+// }
 async fn register(
     State(state): State<AppState>,
-    Json(req): Json<UserRegisterReq>,
+    Json(req): Json<RegisterUserReq>,
 ) -> Result<AppJson<()>> {
-    state.user_service.register(&req).await?;
+    state.user_service.register_user(req).await?;
 
     Ok(AppJson::ok(()))
 }
@@ -28,7 +28,9 @@ async fn login(
     State(state): State<AppState>,
     Json(req): Json<UserLoginReq>,
 ) -> Result<AppJson<String>> {
-    let token = state.user_service.login(req).await?;
 
-    Ok(AppJson::ok(token))
+    todo!()
+    // let token = state.user_service.login(req).await?;
+
+    // Ok(AppJson::ok(token))
 }

@@ -1,107 +1,79 @@
-use std::sync::Arc;
-
-use crate::{encryptor::Encryptor, jwt_helper::JwtHelper};
-use abi::{async_trait::async_trait, user::*, ErrorKind, Result};
-use db::user::UserRepo;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserRegisterReq {
-    pub login_type: LoginType,
-    pub auth_token: String,
-    pub auth_name: String,
-    pub nikename: String,
-    pub uid: String,
-}
-
-impl UserRegisterReq {
-    pub fn to_form(&self, encryptor: &Arc<dyn Encryptor>) -> UserRegisterForm {
-        let auth_token = encryptor.encode(&self.auth_token.as_bytes());
-
-        UserRegisterForm {
-            login_type: self.login_type.clone(),
-            auth_token,
-            auth_name: self.auth_name.clone(),
-            nikename: self.nikename.clone(),
-            uid: self.uid.clone(),
-            create_at: 0,
-            update_at: 0,
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserLoginReq {
-    pub login_type: LoginType,
-    pub auth_token: String,
-    pub auth_name: String,
-}
-
-impl UserLoginReq {
-    pub fn to_form(&self, encryptor: &Arc<dyn Encryptor>) -> UserLoginForm {
-        let auth_token = encryptor.encode(&self.auth_token.as_bytes());
-
-        UserLoginForm {
-            login_type: self.login_type.clone(),
-            auth_token: auth_token,
-            auth_name: self.auth_name.clone(),
-        }
-    }
-}
-
-#[async_trait]
-pub trait UserService: 'static + Send + Sync {
-    async fn register(&self, req: &UserRegisterReq) -> Result<()>;
-    async fn unregister(&self, token: &str) -> Result<()>;
-    async fn login(&self, req: UserLoginReq) -> Result<String>;
-}
+use abi::{
+    protocol::pb::feel_sdk::{
+        user_service_server::UserService, RegisterUserReq, RegisterUserResp, UnregisterUserReq,
+        UnregisterUserResp, UserLoginReq, UserLoginResp,
+    },
+    sea_orm::DatabaseConnection,
+    tonic::{async_trait, Request, Response, Status},
+    Result,
+};
+use db::{database::user::UserDataBase, user::UserRepo};
 
 pub struct UserServiceImpl {
-    user_repo: Arc<dyn UserRepo>,
-    encryptor: Arc<dyn Encryptor>,
-    jwt: Arc<JwtHelper>,
+    database: UserDataBase<DatabaseConnection>,
 }
 
 impl UserServiceImpl {
-    pub fn new(
-        user_repo: Arc<dyn UserRepo>,
-        encryptor: Arc<dyn Encryptor>,
-        jwt: Arc<JwtHelper>,
-    ) -> Self {
-        Self {
-            user_repo,
-            encryptor,
-            jwt,
+    pub fn new(conn: &DatabaseConnection) -> UserServiceImpl {
+        UserServiceImpl {
+            database: UserDataBase::new(conn.clone()),
         }
+    }
+}
+
+impl UserServiceImpl {
+    pub async fn register_user(&self, req: RegisterUserReq) -> Result<RegisterUserResp> {
+        let form = req.into();
+
+        let user = self.database.register(&form).await?;
+
+        Ok(RegisterUserResp {
+            id: user.id,
+            uid: user.uid,
+            nikename: user.nikename,
+        })
+    }
+
+    pub async fn unregister_user(&self, _req: UnregisterUserReq) -> Result<UnregisterUserResp> {
+        todo!()
+    }
+
+    pub async fn user_login(&self, _req: UserLoginReq) -> Result<UserLoginResp> {
+        todo!()
     }
 }
 
 #[async_trait]
 impl UserService for UserServiceImpl {
-    async fn register(&self, req: &UserRegisterReq) -> Result<()> {
-        let form = req.to_form(&self.encryptor);
+    async fn register_user(
+        &self,
+        request: Request<RegisterUserReq>,
+    ) -> Result<Response<RegisterUserResp>, Status> {
+        let req = request.into_inner();
 
-        self.user_repo.register(&form).await?;
+        let resp = self.register_user(req).await?;
 
-        Ok(())
+        Ok(Response::new(resp))
     }
 
-    async fn unregister(&self, token: &str) -> Result<()> {
-        if let Some(user_id) = self.jwt.decode(token) {
-            self.user_repo.unregister(user_id).await?;
-            Ok(())
-        } else {
-            Err(ErrorKind::TokenInvaild.into())
-        }
+    async fn unregister_user(
+        &self,
+        request: Request<UnregisterUserReq>,
+    ) -> Result<Response<UnregisterUserResp>, Status> {
+        let req = request.into_inner();
+
+        let resp = self.unregister_user(req).await?;
+
+        Ok(Response::new(resp))
     }
+    async fn user_login(
+        &self,
+        request: Request<UserLoginReq>,
+    ) -> Result<Response<UserLoginResp>, Status> {
+        let req = request.into_inner();
 
-    async fn login(&self, req: UserLoginReq) -> Result<String> {
-        let form = req.to_form(&self.encryptor);
+        let resp = self.user_login(req).await?;
 
-        let user = self.user_repo.login(&form).await?;
-
-        let token = self.jwt.encode(user.id);
-
-        Ok(token)
+        Ok(Response::new(resp))
     }
 }

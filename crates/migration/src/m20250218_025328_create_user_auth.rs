@@ -13,13 +13,14 @@ impl MigrationTrait for Migration {
                     .table(UserAuthEntity)
                     .if_not_exists()
                     .col(big_integer(UserAuthColumn::UserId))
-                    .col(string(UserAuthColumn::LoginType))
+                    .col(string(UserAuthColumn::AuthType))
+                    .col(string(UserAuthColumn::Salt))
                     .col(binary(UserAuthColumn::AuthToken))
                     .col(string(UserAuthColumn::AuthName))
                     .primary_key(
                         Index::create()
                             .col(UserAuthColumn::UserId)
-                            .col(UserAuthColumn::LoginType),
+                            .col(UserAuthColumn::AuthType),
                     )
                     .to_owned(),
             )

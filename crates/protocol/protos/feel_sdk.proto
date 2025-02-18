@@ -1,12 +1,12 @@
 syntax = "proto3";
 package feel_sdk;
 
-enum LoginType {
+enum AuthType {
   Phone = 0;
 }
 
 message RegisterUserReq {
-  LoginType login_type = 1;
+  AuthType auth_type = 1;
   string auth_token = 2;
   string auth_name = 3;
   string nikename = 4;
@@ -20,7 +20,7 @@ message RegisterUserResp {
 }
 
 message UnregisterUserReq {
-  LoginType login_type = 1;
+  AuthType auth_type = 1;
   string auth_token = 2;
   string auth_name = 3;
   string id = 4;
@@ -33,15 +33,13 @@ message UnregisterUserResp {
 }
 
 message UserLoginReq {
-  LoginType login_type = 1;
+  AuthType auth_type = 1;
   string auth_token = 2;
   string auth_name = 3;
   string id = 4;
 }
 
-message UserLoginResp {
-  string token = 2;
-}
+message UserLoginResp { string token = 2; }
 
 service UserService {
   rpc register_user(RegisterUserReq) returns (RegisterUserResp);
