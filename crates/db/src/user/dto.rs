@@ -1,12 +1,14 @@
 use abi::{
-    protocol::pb::feel_sdk::{AuthType, RegisterUserReq},
+    protocol::pb::feel_sdk::{AuthType, RegisterUserReq, UserLoginResp},
     sea_orm::{ActiveModelTrait, IntoActiveModel, Set},
-    tools::{
-        encryptor::{self, get_rand_salt},
-        time_util,
-    },
+    ErrorKind, Result,
 };
 use entity::user::*;
+
+use tools::{
+    encryptor::{self, get_rand_salt},
+    time_util,
+};
 
 #[derive(Debug, Clone)]
 pub struct RegisterUserForm {
@@ -74,6 +76,22 @@ pub struct User {
 }
 
 impl User {
+    pub fn from_user_model(value: UserBaseModel) -> User {
+        User {
+            id: value.id,
+            uid: value.uid,
+            nikename: value.nikename,
+        }
+    }
+
+    pub fn into_user_login_resp(self) -> UserLoginResp {
+        UserLoginResp {
+            id: self.id,
+            uid: self.uid,
+            nikename: self.nikename,
+        }
+    }
+
     pub fn new(user_model: UserBaseModel) -> Self {
         User {
             id: user_model.id,
@@ -83,6 +101,57 @@ impl User {
     }
 }
 
-pub enum UserAuthType {}
+pub enum UserAuthType {
+    Phone,
+}
 
-pub struct UserAuth {}
+impl UserAuthType {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            UserAuthType::Phone => "Phone",
+        }
+    }
+
+    pub fn from_str(data: &str) -> Result<Self> {
+        match data {
+            "Phone" => Ok(UserAuthType::Phone),
+            _ => Err(ErrorKind::ParseError.into()),
+        }
+    }
+}
+
+impl From<AuthType> for UserAuthType {
+    fn from(value: AuthType) -> Self {
+        match value {
+            AuthType::Phone => UserAuthType::Phone,
+        }
+    }
+}
+
+impl From<i32> for UserAuthType {
+    fn from(value: i32) -> Self {
+        let auth_type = AuthType::try_from(value).unwrap();
+
+        UserAuthType::from(auth_type)
+    }
+}
+
+pub struct UserAuth {
+    pub user_id: i64,
+    pub auth_type: UserAuthType,
+    pub auth_name: String,
+    pub salt: String,
+    pub auth_token: Vec<u8>,
+}
+
+impl UserAuth {
+    pub fn from_user_auth_model(value: UserAuthModel) -> Result<UserAuth> {
+        Ok(UserAuth {
+            user_id: value.user_id,
+            auth_type: UserAuthType::from_str(&value.auth_type)?,
+            auth_name: value.auth_name,
+            salt: value.salt,
+            auth_token: value.auth_token,
+        })
+    }
+}

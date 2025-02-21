@@ -41,7 +41,7 @@ pub struct UnregisterUserResp {
     #[prost(string, tag = "3")]
     pub nikename: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(serde::Serialize, serde::Deserialize, Clone, PartialEq, ::prost::Message)]
 pub struct UserLoginReq {
     #[prost(enumeration = "AuthType", tag = "1")]
     pub auth_type: i32,
@@ -49,13 +49,15 @@ pub struct UserLoginReq {
     pub auth_token: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub auth_name: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserLoginResp {
+    #[prost(int64, tag = "1")]
+    pub id: i64,
     #[prost(string, tag = "2")]
-    pub token: ::prost::alloc::string::String,
+    pub uid: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub nikename: ::prost::alloc::string::String,
 }
 /// 标签
 #[derive(Clone, PartialEq, ::prost::Message)]

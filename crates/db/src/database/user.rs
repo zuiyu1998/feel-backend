@@ -1,7 +1,8 @@
 use abi::{
-    sea_orm::{ActiveModelTrait, ConnectionTrait, IntoActiveModel, Set},
-    tonic::async_trait,
-    Result,
+    sea_orm::{
+        ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, IntoActiveModel, QueryFilter,
+        Set,
+    }, tonic::async_trait, ErrorKind, Result
 };
 use entity::user::*;
 
@@ -44,11 +45,20 @@ impl<C: ConnectionTrait + Send + 'static> UserRepo for UserDataBase<C> {
         Ok(())
     }
 
-    async fn get_user_base(&self, _uid: &str) -> Result<User> {
-        todo!()
+    async fn get_user_base(&self, id: i64) -> Result<User> {
+        let sql = UserBaseEntity::find_by_id(id);
+
+        let model = sql.one(&self.conn).await?.ok_or(ErrorKind::UserNotFound)?;
+        Ok(User::from_user_model(model))
     }
 
-    async fn get_user_auth(&self, _uid: &str, _auth_type: UserAuthType) -> Result<UserAuth> {
-        todo!()
+    async fn get_user_auth(&self, auth_type: UserAuthType, auth_name: &str) -> Result<UserAuth> {
+        let sql = UserAuthEntity::find()
+            .filter(UserAuthColumn::AuthType.eq(auth_type.as_str()))
+            .filter(UserAuthColumn::AuthName.eq(auth_name));
+
+        let model = sql.one(&self.conn).await?.ok_or(ErrorKind::AuthNotFound)?;
+
+        Ok(UserAuth::from_user_auth_model(model)?)
     }
 }

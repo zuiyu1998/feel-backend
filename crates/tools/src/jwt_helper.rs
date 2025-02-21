@@ -16,10 +16,10 @@ impl JwtHelper {
         }
     }
 
-    pub fn encode(&self, user_id: i64) -> String {
+    pub fn encode(&self, uid: &str) -> String {
         let claims = RegisteredClaims {
             issuer: Some(self.issuer.clone()),
-            subject: Some(user_id.to_string()),
+            subject: Some(uid.to_string()),
             ..Default::default()
         };
 
@@ -30,12 +30,12 @@ impl JwtHelper {
         signed_token
     }
 
-    pub fn decode(&self, token: &str) -> Option<i64> {
+    pub fn decode(&self, token: &str) -> Option<String> {
         let key: Hmac<Sha256> = Hmac::new_from_slice(self.security.as_bytes()).unwrap();
         let claims: RegisteredClaims = VerifyWithKey::verify_with_key(token, &key).ok()?;
 
         let sub = claims.subject?;
 
-        sub.parse::<i64>().ok()
+        Some(sub)
     }
 }

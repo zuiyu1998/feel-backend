@@ -10,7 +10,6 @@ dependencies = [
  "sea-orm",
  "serde",
  "thiserror 1.0.69",
- "tools",
  "tracing",
  "tracing-subscriber",
 ]
@@ -145,6 +144,7 @@ dependencies = [
  "service",
  "thiserror 1.0.69",
  "tokio",
+ "tools",
 ]
 
 [[package]]
@@ -746,6 +746,7 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "entity",
+ "tools",
 ]
 
 [[package]]
@@ -2672,10 +2673,9 @@ version = "0.1.0"
 dependencies = [
  "abi",
  "db",
- "hmac",
- "jwt",
  "serde",
  "sha2",
+ "tools",
 ]
 
 [[package]]
@@ -3318,8 +3318,10 @@ dependencies = [
 name = "tools"
 version = "0.1.0"
 dependencies = [
+ "abi",
  "chrono",
  "hmac",
+ "jwt",
  "rand 0.9.0",
  "sha2",
 ]

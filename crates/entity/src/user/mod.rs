@@ -3,6 +3,7 @@ pub mod user_base;
 
 pub use user_auth::{
     ActiveModel as UserAuthActiveModel, Column as UserAuthColumn, Entity as UserAuthEntity,
+    Model as UserAuthModel,
 };
 pub use user_base::{
     ActiveModel as UserBaseActiveModel, Column as UserBaseColumn, Entity as UserBaseEntity,

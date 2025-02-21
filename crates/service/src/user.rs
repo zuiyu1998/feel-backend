@@ -5,9 +5,10 @@ use abi::{
     },
     sea_orm::DatabaseConnection,
     tonic::{async_trait, Request, Response, Status},
-    Result,
+    ErrorKind, Result,
 };
 use db::{database::user::UserDataBase, user::UserRepo};
+use tools::encryptor::sha2;
 
 pub struct UserServiceImpl {
     database: UserDataBase<DatabaseConnection>,
@@ -38,8 +39,20 @@ impl UserServiceImpl {
         todo!()
     }
 
-    pub async fn user_login(&self, _req: UserLoginReq) -> Result<UserLoginResp> {
-        todo!()
+    pub async fn user_login(&self, req: UserLoginReq) -> Result<UserLoginResp> {
+        let auth = self
+            .database
+            .get_user_auth(req.auth_type.into(), &req.auth_name)
+            .await?;
+        let auth_token = sha2(auth.salt.as_bytes(), &req.auth_token.as_bytes());
+
+        if auth_token != auth.auth_token {
+            return Err(ErrorKind::PasswordNotMatch.into());
+        }
+
+        let user = self.database.get_user_base(auth.user_id).await?;
+
+        Ok(user.into_user_login_resp())
     }
 }
 

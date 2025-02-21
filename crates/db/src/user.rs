@@ -14,8 +14,8 @@ pub trait UserRepo: 'static + Send + Sync {
     async fn unregister(&self, user_id: i64) -> Result<()>;
 
     //获取用户信息
-    async fn get_user_base(&self, uid: &str) -> Result<User>;
+    async fn get_user_base(&self, id: i64) -> Result<User>;
 
     //获取用户授权
-    async fn get_user_auth(&self, uid: &str, auth_type: UserAuthType) -> Result<UserAuth>;
+    async fn get_user_auth(&self, auth_type: UserAuthType, auth_name: &str) -> Result<UserAuth>;
 }

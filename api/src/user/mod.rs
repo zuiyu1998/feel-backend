@@ -5,7 +5,7 @@ use axum::{extract::State, routing::{get, post}, Json, Router};
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/register", post(register))
-        // .route("/login", post(login))
+        .route("/login", post(login))
         // .route("/unregister", post(unregister))
 }
 
@@ -29,8 +29,9 @@ async fn login(
     Json(req): Json<UserLoginReq>,
 ) -> Result<AppJson<String>> {
 
-    todo!()
-    // let token = state.user_service.login(req).await?;
+    let resp = state.user_service.user_login(req).await?;
 
-    // Ok(AppJson::ok(token))
+    let token = state.jwt_helper.encode(&resp.uid);
+
+    Ok(AppJson::ok(token))
 }

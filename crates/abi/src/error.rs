@@ -10,6 +10,12 @@ pub enum ErrorKind {
     PasswordNotMatch,
     #[error("TokenInvaild")]
     TokenInvaild,
+    #[error("AuthNotFound")]
+    AuthNotFound,
+    #[error("UserNotFound")]
+    UserNotFound,
+    #[error("ParseError")]
+    ParseError,
 }
 
 #[derive(Debug, Error)]

@@ -12,6 +12,7 @@ abi = { path = "../crates/abi" }
 service = { path = "../crates/service" }
 db = { path = "../crates/db" }
 migration = { path = "../crates/migration" }
+tools = { path = "../crates/tools" }
 
 thiserror = { workspace = true }
 serde = { workspace = true }

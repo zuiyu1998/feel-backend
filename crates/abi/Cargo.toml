@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 
 protocol = { path = "../protocol" }
-tools = { path = "../tools" }
 
 thiserror = { workspace = true }
 sea-orm = { workspace = true, features = ["runtime-tokio-native-tls", "sqlx-postgres"] }
