@@ -9,6 +9,7 @@ pub use protocol;
 pub use protocol::tonic as tonic;
 pub use serde_json;
 pub use config;
+pub use tokio;
 
 pub use error::*;
 

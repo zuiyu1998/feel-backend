@@ -1,0 +1,9 @@
+[package]
+name = "feel-api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+api = { path = "../../crates/api" }
+abi = { path = "../../crates/abi" }
+tools = { path = "../../crates/tools" }

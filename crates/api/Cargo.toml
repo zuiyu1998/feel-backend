@@ -1,0 +1,16 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+abi = { path = "../abi" }
+service = { path = "../service" }
+db = { path = "../db" }
+migration = { path = "../migration" }
+tools = { path = "../tools" }
+
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_repr = { workspace = true }
+axum = { workspace = true }

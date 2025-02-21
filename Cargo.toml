@@ -5,9 +5,11 @@ members = [
     "crates/db",
     "crates/entity",
     "crates/migration",
-    "api",
+    "crates/api",
     "crates/service",
-    "crates/protocol", "crates/tools",
+    "crates/protocol",
+    "crates/tools",
+    "cmd/feel-api",
 ]
 resolver = "2"
 
