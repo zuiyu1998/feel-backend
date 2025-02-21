@@ -18,9 +18,7 @@ async fn main() -> Result<()> {
         redis,
     };
 
-    if let Err(e) = api::start(&config).await {
-        print!("api start error: {}", e);
-    }
+    api::start(&config).await?;
 
     Ok(())
 }
