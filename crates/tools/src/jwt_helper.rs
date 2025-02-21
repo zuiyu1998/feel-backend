@@ -1,7 +1,13 @@
-use abi::config::JWTConfig;
 use hmac::{Hmac, Mac};
 use jwt::{RegisteredClaims, SignWithKey, VerifyWithKey};
+use serde::{Deserialize, Serialize};
 use sha2::Sha256;
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct JWTConfig {
+    pub security: String,
+    pub issuer: String,
+}
 
 pub struct JwtHelper {
     security: String,

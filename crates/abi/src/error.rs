@@ -1,6 +1,9 @@
 use sea_orm::DbErr;
 use std::io::Error as IoError;
 use thiserror::Error;
+use redis::RedisError;
+use serde_json::Error as SerdeJsonError;
+use config::ConfigError;
 
 use protocol::tonic::Status;
 
@@ -26,6 +29,12 @@ pub enum Error {
     DbErr(#[from] DbErr),
     #[error("kind: {0}")]
     Kind(#[from] ErrorKind),
+    #[error("redis error: {0}")]
+    RedisError(#[from] RedisError),
+    #[error("serde json error: {0}")]
+    SerdeJsonError(#[from] SerdeJsonError),
+    #[error("config error: {0}")]
+    ConfigError(#[from] ConfigError),
 }
 
 pub type Result<T, E = Error> = core::result::Result<T, E>;

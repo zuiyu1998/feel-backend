@@ -1,26 +1,10 @@
 use tracing::Level;
 
-#[derive(Debug, Default)]
-pub struct Config {
-    pub api: ApiConfig,
-    pub log: LogConfig,
-    pub sha: ShaConfig,
-    pub db: DbConfig,
-    pub jwt: JWTConfig,
-}
-
 #[derive(Debug, Clone)]
 pub struct DbConfig {
     pub database_url: String,
 }
 
-impl Default for DbConfig {
-    fn default() -> Self {
-        DbConfig {
-            database_url: "postgresql://postgres:bj123456@localhost/feel".to_string(),
-        }
-    }
-}
 
 #[derive(Debug, Clone)]
 pub struct JWTConfig {
@@ -69,25 +53,4 @@ impl TraceLevel {
 pub struct LogConfig {
     pub level: TraceLevel,
     pub filter: String,
-}
-
-#[derive(Debug)]
-pub struct ApiConfig {
-    host: String,
-    port: u16,
-}
-
-impl Default for ApiConfig {
-    fn default() -> Self {
-        ApiConfig {
-            host: "127.0.0.1".to_string(),
-            port: 3000,
-        }
-    }
-}
-
-impl ApiConfig {
-    pub fn addr(&self) -> String {
-        format!("{}:{}", self.host, self.port)
-    }
 }

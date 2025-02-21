@@ -1,14 +1,15 @@
-mod routes;
+pub mod routes;
 mod user;
 
 mod utils;
 
 mod error;
 
-use abi::{config::Config, log, tracing, Result};
-use routes::AppState;
+use abi::{log, tracing, Result};
 
-pub async fn start(config: &Config) -> Result<()> {
+pub use routes::{ApiConfig, AppState};
+
+pub async fn start(config: &ApiConfig) -> Result<()> {
     log::logger_init(&config.log);
 
     let app_state = AppState::from_config(config).await?;

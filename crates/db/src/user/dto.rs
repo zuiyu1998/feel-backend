@@ -5,6 +5,7 @@ use abi::{
 };
 use entity::user::*;
 
+use serde::{Deserialize, Serialize};
 use tools::{
     encryptor::{self, get_rand_salt},
     time_util,
@@ -69,6 +70,7 @@ impl IntoActiveModel<UserBaseActiveModel> for RegisterUserForm {
     }
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct User {
     pub id: i64,
     pub uid: String,
@@ -101,6 +103,7 @@ impl User {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum UserAuthType {
     Phone,
 }
@@ -136,6 +139,7 @@ impl From<i32> for UserAuthType {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserAuth {
     pub user_id: i64,
     pub auth_type: UserAuthType,

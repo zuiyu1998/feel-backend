@@ -1,3 +1,9 @@
+pub mod cache;
 pub mod user;
 
-pub mod database;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DbConfig {
+    pub database_url: String,
+}

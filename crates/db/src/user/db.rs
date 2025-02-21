@@ -8,18 +8,18 @@ use entity::user::*;
 
 use crate::user::{dto::*, UserRepo};
 
-pub struct UserDataBase<C> {
+pub struct UserDb<C> {
     conn: C,
 }
 
-impl<C: ConnectionTrait> UserDataBase<C> {
-    pub fn new(conn: C) -> UserDataBase<C> {
-        UserDataBase { conn }
+impl<C: ConnectionTrait> UserDb<C> {
+    pub fn new(conn: C) -> UserDb<C> {
+        UserDb { conn }
     }
 }
 
 #[async_trait]
-impl<C: ConnectionTrait + Send + 'static> UserRepo for UserDataBase<C> {
+impl<C: ConnectionTrait + Send + 'static> UserRepo for UserDb<C> {
     ///注册
     ///todo 错误处理
     async fn register(&self, form: &RegisterUserForm) -> Result<User> {

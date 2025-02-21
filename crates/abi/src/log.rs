@@ -1,5 +1,7 @@
 use std::error::Error;
 
+use serde::{Deserialize, Serialize};
+use tracing::Level;
 use tracing_subscriber::{
     filter::{FromEnvError, ParseError},
     fmt,
@@ -7,7 +9,26 @@ use tracing_subscriber::{
     EnvFilter,
 };
 
-use crate::config::LogConfig;
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+
+pub enum TraceLevel {
+    #[default]
+    Debug,
+}
+
+impl TraceLevel {
+    pub fn level(&self) -> Level {
+        match self {
+            TraceLevel::Debug => Level::DEBUG,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+pub struct LogConfig {
+    pub level: TraceLevel,
+    pub filter: String,
+}
 
 pub fn logger_init(config: &LogConfig) {
     let default_filter = { format!("{},{}", config.level.level(), config.filter) };

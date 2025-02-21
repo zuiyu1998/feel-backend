@@ -7,3 +7,5 @@ edition = "2021"
 abi = { path = "../abi" }
 tools = { path = "../tools" }
 entity = { path = "../entity" }
+
+serde = { workspace = true, features = ["derive"] }

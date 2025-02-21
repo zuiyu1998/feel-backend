@@ -1,24 +1,23 @@
+use std::sync::Arc;
+
 use abi::{
     protocol::pb::feel_sdk::{
         user_service_server::UserService, RegisterUserReq, RegisterUserResp, UnregisterUserReq,
         UnregisterUserResp, UserLoginReq, UserLoginResp,
     },
-    sea_orm::DatabaseConnection,
     tonic::{async_trait, Request, Response, Status},
     ErrorKind, Result,
 };
-use db::{database::user::UserDataBase, user::UserRepo};
+use db::user::UserDataBase;
 use tools::encryptor::sha2;
 
 pub struct UserServiceImpl {
-    database: UserDataBase<DatabaseConnection>,
+    database: Arc<dyn UserDataBase>,
 }
 
 impl UserServiceImpl {
-    pub fn new(conn: &DatabaseConnection) -> UserServiceImpl {
-        UserServiceImpl {
-            database: UserDataBase::new(conn.clone()),
-        }
+    pub fn new(database: Arc<dyn UserDataBase>) -> UserServiceImpl {
+        Self { database }
     }
 }
 

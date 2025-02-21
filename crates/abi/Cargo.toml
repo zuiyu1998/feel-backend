@@ -8,8 +8,18 @@ edition = "2021"
 protocol = { path = "../protocol" }
 
 thiserror = { workspace = true }
-sea-orm = { workspace = true, features = ["runtime-tokio-native-tls", "sqlx-postgres"] }
+
+serde_json = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 
-tracing = { version = "0.1"}
+tracing = { version = "0.1" }
 tracing-subscriber = { version = "0.3" }
+
+sea-orm = { workspace = true, features = [
+    "runtime-tokio-native-tls",
+    "sqlx-postgres",
+] }
+
+redis = { version = "0.25.2", features = ["tokio-comp"] }
+
+config = { workspace = true, features = ["yaml"] }

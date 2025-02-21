@@ -7,7 +7,6 @@ members = [
     "crates/migration",
     "api",
     "crates/service",
-    "crates/cache",
     "crates/protocol", "crates/tools",
 ]
 resolver = "2"
@@ -23,6 +22,7 @@ tokio = { version = "1.43" }
 # 序列化
 serde = { version = "1.0" }
 serde_repr = "0.1"
+serde_json = { version = "1.0" }
 
 # grpc
 tonic = { version = "0.12" }
@@ -32,3 +32,5 @@ prost = "0.13"
 prost-types = "0.13"
 
 axum = { version = "0.7" }
+
+config = { version = "0.15" }
