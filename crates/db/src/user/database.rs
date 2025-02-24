@@ -25,7 +25,7 @@ impl UserDataBase for UserDataBaseImpl {
     ///注册
     ///todo 错误处理
     async fn register(&self, form: &RegisterUserForm) -> Result<User> {
-        let user = self.db.register(&form).await?;
+        let user = self.db.register(form).await?;
         Ok(user)
     }
 

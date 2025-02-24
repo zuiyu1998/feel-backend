@@ -43,7 +43,7 @@ impl UserServiceImpl {
             .database
             .get_user_auth(req.auth_type.into(), &req.auth_name)
             .await?;
-        let auth_token = sha2(auth.salt.as_bytes(), &req.auth_token.as_bytes());
+        let auth_token = sha2(auth.salt.as_bytes(), req.auth_token.as_bytes());
 
         if auth_token != auth.auth_token {
             return Err(ErrorKind::PasswordNotMatch.into());

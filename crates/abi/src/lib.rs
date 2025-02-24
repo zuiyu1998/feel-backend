@@ -3,13 +3,13 @@ pub mod error;
 
 pub mod log;
 
-pub use sea_orm;
-pub use tracing;
-pub use protocol;
-pub use protocol::tonic as tonic;
-pub use serde_json;
 pub use config;
+pub use protocol;
+pub use protocol::tonic;
+pub use sea_orm;
+pub use serde_json;
 pub use tokio;
+pub use tracing;
 
 pub use error::*;
 

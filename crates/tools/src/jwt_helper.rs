@@ -30,10 +30,7 @@ impl JwtHelper {
         };
 
         let key: Hmac<Sha256> = Hmac::new_from_slice(self.security.as_bytes()).unwrap();
-
-        let signed_token = claims.sign_with_key(&key).unwrap();
-
-        signed_token
+        claims.sign_with_key(&key).unwrap()
     }
 
     pub fn decode(&self, token: &str) -> Option<String> {

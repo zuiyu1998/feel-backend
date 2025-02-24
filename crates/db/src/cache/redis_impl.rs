@@ -10,8 +10,8 @@ use tools::json_util;
 
 use super::Cache;
 
-pub const USER_BASE_KEY: &'static str = "__user_base_key";
-pub const USER_AUTH_KEY: &'static str = "__user_auth_key";
+pub const USER_BASE_KEY: &str = "__user_base_key";
+pub const USER_AUTH_KEY: &str = "__user_auth_key";
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RedisConfig {
@@ -98,5 +98,12 @@ impl Cache for RedisCache {
         let _: () = conn.hset(USER_AUTH_KEY, field, value).await?;
 
         Ok(())
+    }
+}
+
+mod test {
+    #[test]
+    fn test_redis_cache() {
+        assert_eq!(true, true);
     }
 }

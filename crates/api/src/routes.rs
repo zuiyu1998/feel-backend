@@ -4,7 +4,8 @@ use abi::{log::LogConfig, sea_orm::Database, Result};
 use axum::Router;
 use db::{
     cache::redis_impl::{RedisCache, RedisConfig},
-    user::{db::UserDb, user::UserDataBaseImpl, UserDataBase}, DbConfig,
+    user::{database::UserDataBaseImpl, db::UserDb, UserDataBase},
+    DbConfig,
 };
 use migration::{Migrator, MigratorTrait};
 use serde::{Deserialize, Serialize};

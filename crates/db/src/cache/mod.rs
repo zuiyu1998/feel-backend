@@ -1,7 +1,7 @@
 pub mod redis_impl;
 
-use abi::{tonic::async_trait, Result};
 use crate::user::dto::*;
+use abi::{tonic::async_trait, Result};
 
 #[async_trait]
 pub trait Cache: 'static + Send + Sync {

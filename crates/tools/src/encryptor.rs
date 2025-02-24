@@ -1,7 +1,7 @@
 use rand::{rng, Rng};
 use sha2::{Digest, Sha256};
 
-const CHARS: &'static [char; 4] = &['A', 'B', 'C', 'D'];
+const CHARS: &[char; 4] = &['A', 'B', 'C', 'D'];
 
 pub fn get_rand_salt(len: usize) -> String {
     let mut rng = rng();

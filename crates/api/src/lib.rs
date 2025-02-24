@@ -5,7 +5,7 @@ mod utils;
 
 mod error;
 
-use abi::{log, tracing, Result, tokio};
+use abi::{log, tokio, tracing, Result};
 
 pub use routes::{ApiConfig, AppState};
 

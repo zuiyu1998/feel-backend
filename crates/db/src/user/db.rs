@@ -2,7 +2,9 @@ use abi::{
     sea_orm::{
         ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, IntoActiveModel, QueryFilter,
         Set,
-    }, tonic::async_trait, ErrorKind, Result
+    },
+    tonic::async_trait,
+    ErrorKind, Result,
 };
 use entity::user::*;
 

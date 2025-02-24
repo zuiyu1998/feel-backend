@@ -115,7 +115,7 @@ impl UserAuthType {
         }
     }
 
-    pub fn from_str(data: &str) -> Result<Self> {
+    pub fn parse_with_str(data: &str) -> Result<Self> {
         match data {
             "Phone" => Ok(UserAuthType::Phone),
             _ => Err(ErrorKind::ParseError.into()),
@@ -152,7 +152,7 @@ impl UserAuth {
     pub fn from_user_auth_model(value: UserAuthModel) -> Result<UserAuth> {
         Ok(UserAuth {
             user_id: value.user_id,
-            auth_type: UserAuthType::from_str(&value.auth_type)?,
+            auth_type: UserAuthType::parse_with_str(&value.auth_type)?,
             auth_name: value.auth_name,
             salt: value.salt,
             auth_token: value.auth_token,

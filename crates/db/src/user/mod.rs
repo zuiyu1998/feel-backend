@@ -1,8 +1,8 @@
 use abi::{tonic::async_trait, Result};
 
+pub mod database;
 pub mod db;
 pub mod dto;
-pub mod user;
 
 use dto::*;
 

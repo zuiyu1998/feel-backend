@@ -1,9 +1,9 @@
+use config::ConfigError;
+use redis::RedisError;
 use sea_orm::DbErr;
+use serde_json::Error as SerdeJsonError;
 use std::io::Error as IoError;
 use thiserror::Error;
-use redis::RedisError;
-use serde_json::Error as SerdeJsonError;
-use config::ConfigError;
 
 use protocol::tonic::Status;
 
@@ -11,8 +11,8 @@ use protocol::tonic::Status;
 pub enum ErrorKind {
     #[error("PasswordNotMatch")]
     PasswordNotMatch,
-    #[error("TokenInvaild")]
-    TokenInvaild,
+    #[error("TokenInvalid")]
+    TokenInvalid,
     #[error("AuthNotFound")]
     AuthNotFound,
     #[error("UserNotFound")]
