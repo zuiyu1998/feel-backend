@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 abi = { path = "../abi" }
 service = { path = "../service" }
-db = { path = "../db" }
+storage = { path = "../storage" }
 migration = { path = "../migration" }
 tools = { path = "../tools" }
 

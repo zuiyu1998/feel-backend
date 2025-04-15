@@ -8,7 +8,7 @@ use abi::{
     tonic::{async_trait, Request, Response, Status},
     ErrorKind, Result,
 };
-use db::user::UserDataBase;
+use storage::user::UserDataBase;
 use tools::encryptor::sha2;
 
 pub struct UserServiceImpl {

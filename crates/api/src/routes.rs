@@ -2,14 +2,14 @@ use std::sync::Arc;
 
 use abi::{log::LogConfig, sea_orm::Database, Result};
 use axum::Router;
-use db::{
+use migration::{Migrator, MigratorTrait};
+use serde::{Deserialize, Serialize};
+use service::user::UserServiceImpl;
+use storage::{
     cache::redis_impl::{RedisCache, RedisConfig},
     user::{database::UserDataBaseImpl, db::UserDb, UserDataBase},
     DbConfig,
 };
-use migration::{Migrator, MigratorTrait};
-use serde::{Deserialize, Serialize};
-use service::user::UserServiceImpl;
 use tools::jwt_helper::{JWTConfig, JwtHelper};
 
 use crate::user;

@@ -2,7 +2,7 @@
 members = [
     "./crates/abi",
     ".",
-    "crates/db",
+    "crates/storage",
     "crates/entity",
     "crates/migration",
     "crates/api",

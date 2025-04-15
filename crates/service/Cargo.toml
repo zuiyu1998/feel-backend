@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 abi = { path = "../abi" }
-db = { path = "../db" }
+storage = { path = "../storage" }
 tools = { path = "../tools" }
 
 sha2 = { version = "0.10" }
