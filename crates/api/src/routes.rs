@@ -4,7 +4,10 @@ use abi::{log::LogConfig, sea_orm::Database, Result};
 use axum::Router;
 use migration::{Migrator, MigratorTrait};
 use serde::{Deserialize, Serialize};
-use service::user::UserServiceImpl;
+use service::{
+    user::UserServiceImpl,
+    web_hook::{WebHookService, WebHookServiceCommon},
+};
 use storage::{
     cache::redis_impl::{RedisCache, RedisConfig},
     user::{database::UserDataBaseImpl, db::UserDb, UserDataBase},
@@ -39,13 +42,19 @@ impl ApiServerConfig {
 pub struct AppState {
     pub user_service: Arc<UserServiceImpl>,
     pub jwt_helper: Arc<JwtHelper>,
+    pub web_hook: Arc<dyn WebHookService>,
 }
 
 impl AppState {
-    pub fn new(database: Arc<dyn UserDataBase>, jwt_helper: JwtHelper) -> Self {
+    pub fn new(
+        database: Arc<dyn UserDataBase>,
+        jwt_helper: JwtHelper,
+        web_hook: Arc<dyn WebHookService>,
+    ) -> Self {
         AppState {
             user_service: Arc::new(UserServiceImpl::new(database)),
             jwt_helper: Arc::new(jwt_helper),
+            web_hook,
         }
     }
 
@@ -60,7 +69,11 @@ impl AppState {
 
         Migrator::up(&conn, None).await?;
 
-        Ok(AppState::new(user_database, jwt_helper))
+        Ok(AppState::new(
+            user_database,
+            jwt_helper,
+            Arc::new(WebHookServiceCommon),
+        ))
     }
 }
 

@@ -19,7 +19,8 @@ async fn register(
     State(state): State<AppState>,
     Json(req): Json<RegisterUserReq>,
 ) -> Result<AppJson<()>> {
-    state.user_service.register_user(req).await?;
+    let resp = state.user_service.register_user(req).await?;
+    state.web_hook.register_chat_user(&resp).await?;
 
     Ok(AppJson::ok(()))
 }
