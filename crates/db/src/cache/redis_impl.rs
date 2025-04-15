@@ -17,11 +17,12 @@ pub const USER_AUTH_KEY: &str = "__user_auth_key";
 pub struct RedisConfig {
     pub host: String,
     pub port: u16,
+    pub password: String,
 }
 
 impl RedisConfig {
     pub fn url(&self) -> String {
-        format!("redis://{}:{}", self.host, self.port)
+        format!("redis://{}@{}:{}", self.password, self.host, self.port)
     }
 }
 
